@@ -3,10 +3,55 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MenuInicial">
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MenuInicial"
+    android:background="#30120c">
 
-    <TextView android:text="&quot;OLAR&quot;" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
 
+        <ImageView
+            android:layout_width="260dp"
+            android:layout_height="250dp"
+            android:id="@+id/imageView"
+            android:background="@drawable/logo"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="154dp"
+            android:layout_height="wrap_content"
+            android:text="Eventos Próximos"
+            android:id="@+id/btn_main_eventos"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="#ff0039"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:text="Minha Conta"
+            android:id="@+id/btn_main_conta"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="#ff0039"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:layout_width="123dp"
+            android:layout_height="wrap_content"
+            android:text="Configurações"
+            android:id="@+id/btn_main_config"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="#ff0039"
+            android:textColor="#ffffff" />
+    </LinearLayout>
 </RelativeLayout>

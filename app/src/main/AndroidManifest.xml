@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".EventosProximos"
+            android:label="@string/title_activity_eventos_proximos" >
+        </activity>
+        <activity
+            android:name=".MinhaConta"
+            android:label="@string/title_activity_minha_conta" >
+        </activity>
     </application>
 
 </manifest>

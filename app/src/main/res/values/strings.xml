@@ -3,4 +3,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_eventos_proximos">EventosProximos</string>
+    <string name="title_activity_minha_conta">MinhaConta</string>
 </resources>
