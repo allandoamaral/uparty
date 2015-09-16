@@ -19,7 +19,7 @@ public class MenuInicial extends AppCompatActivity {
 
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent actionEventos = new Intent(MenuInicial.this, EventosProximos.class);
+                Intent actionEventos = new Intent(MenuInicial.this, Eventos.class);
                 //myIntent.putExtra("key", value); //Optional parameters
                 MenuInicial.this.startActivity(actionEventos);
             }
