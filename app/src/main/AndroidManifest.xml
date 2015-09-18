@@ -12,7 +12,7 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+    <uses-library android:name="com.google.android.maps" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,10 +28,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EventosProximos"
-            android:label="@string/title_activity_eventos_proximos" >
-        </activity>
-        <activity
             android:name=".MinhaConta"
             android:label="@string/title_activity_minha_conta" >
         </activity>
@@ -41,7 +37,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyAPSr5qNjWvmYsdKEDsf8d5IPv2HSg-efg" />
 
         <activity
             android:name=".MapaEventos"
