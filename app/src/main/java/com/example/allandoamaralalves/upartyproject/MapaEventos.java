@@ -1,8 +1,13 @@
 package com.example.allandoamaralalves.upartyproject;
 
+import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -60,7 +65,21 @@ public class MapaEventos extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        // Get LocationManager object from System Service LOCATION_SERVICE
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        // Create a criteria object to retrieve provider
+        Criteria criteria = new Criteria();
+
+        // Get the name of the best provider
+        String provider = locationManager.getBestProvider(criteria, true);
+        // Get Current Location
+        Location myLocation = locationManager.getLastKnownLocation(provider);
+
+        mMap.addMarker(new MarkerOptions().position(new LatLng(-80, 20.10)).title("Marker1").snippet("OLAR"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(-180, 180)).title("LAla"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(0.90, 1)).title("Marker"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude())).title("Marker"));
         mMap.setMyLocationEnabled(true);
     }
 }
