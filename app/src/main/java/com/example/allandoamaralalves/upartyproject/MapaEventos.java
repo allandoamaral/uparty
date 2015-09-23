@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,10 +17,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+
 
 public class MapaEventos extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private String stringTestante;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,46 @@ public class MapaEventos extends FragmentActivity {
                 Intent actionMeusEventos = new Intent(MapaEventos.this, MenuInicial.class);
                 //myIntent.putExtra("key", value); //Optional parameters
                 MapaEventos.this.startActivity(actionMeusEventos);
+            }
+        });
+
+        SupportMapFragment supportMapFragment = (SupportMapFragment)
+                getSupportFragmentManager().findFragmentById(R.id.map);
+
+        // Getting a reference to the map
+        mMap = supportMapFragment.getMap();
+
+        // Setting a click event handler for the map
+        mMap.setOnMapClickListener(new OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng latLng) {
+
+                String longSelecionada = String.valueOf(latLng.longitude);
+
+                TextView t1 = (TextView)findViewById(R.id.long_text);
+                t1.setText(longSelecionada);
+
+                String latSelecionada = String.valueOf(latLng.latitude);
+
+                TextView t2 = (TextView)findViewById(R.id.lat_text);
+                t2.setText(latSelecionada);
+
+                // Creating a marker
+                //MarkerOptions markerOptions = new MarkerOptions();
+
+                // Setting the position for the marker
+                //markerOptions.position(latLng);
+
+                // Setting the title for the marker.
+                // This will be displayed on taping the marker
+                //markerOptions.title(latLng.latitude + " : " + latLng.longitude);
+
+                // Animating to the touched position
+                //mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                // Placing a marker on the touched position
+                //mMap.addMarker(markerOptions);
             }
         });
     }
