@@ -4,12 +4,38 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MenuInicial"
-    android:background="#30120c">
+    android:background="#060202">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:id="@+id/map"
+        android:layout_height="420dp" android:id="@+id/map"
         tools:context="com.example.allandoamaralalves.upartyproject.MapaEventos"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Criar Evento"
+        android:id="@+id/btn_criar_evento"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#ff0039"
+        android:textColor="#FFFF"
+        android:padding="5dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Meus Eventos"
+        android:id="@+id/btn_meus_eventos"
+        android:layout_alignBottom="@+id/btn_criar_evento"
+        android:layout_toEndOf="@+id/btn_criar_evento"
+        android:layout_toRightOf="@+id/btn_criar_evento"
+        android:layout_alignParentRight="false"
+        android:layout_marginLeft="130dp"
+        android:textColor="#FFFF"
+        android:background="#ff0039"
+        android:padding="5dp" />
 
 </RelativeLayout>

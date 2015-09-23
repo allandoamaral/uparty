@@ -6,4 +6,5 @@
     <string name="title_activity_eventos_proximos">EventosProximos</string>
     <string name="title_activity_minha_conta">MinhaConta</string>
     <string name="title_activity_mapa_eventos">Map</string>
+    <string name="title_activity_criar_evento">Criar Evento</string>
 </resources>

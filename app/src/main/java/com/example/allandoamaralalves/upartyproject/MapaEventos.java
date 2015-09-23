@@ -1,15 +1,19 @@
 package com.example.allandoamaralalves.upartyproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -22,6 +26,26 @@ public class MapaEventos extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa_eventos);
         setUpMapIfNeeded();
+
+        Button btn = (Button)findViewById(R.id.btn_criar_evento);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent actionCriarEvento = new Intent(MapaEventos.this, CriarEvento.class);
+                //myIntent.putExtra("key", value); //Optional parameters
+                MapaEventos.this.startActivity(actionCriarEvento);
+            }
+        });
+
+        Button btn2 = (Button)findViewById(R.id.btn_meus_eventos);
+
+        btn2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent actionMeusEventos = new Intent(MapaEventos.this, MenuInicial.class);
+                //myIntent.putExtra("key", value); //Optional parameters
+                MapaEventos.this.startActivity(actionMeusEventos);
+            }
+        });
     }
 
     @Override
@@ -76,10 +100,23 @@ public class MapaEventos extends FragmentActivity {
         // Get Current Location
         Location myLocation = locationManager.getLastKnownLocation(provider);
 
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-80, 20.10)).title("Marker1").snippet("OLAR"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-180, 180)).title("LAla"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0.90, 1)).title("Marker"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude())).title("Marker"));
+        if (myLocation != null) {
+
+            LatLng target = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+            CameraPosition position = this.mMap.getCameraPosition();
+
+            CameraPosition.Builder builder = new CameraPosition.Builder();
+            builder.zoom(15);
+            builder.target(target);
+
+            this.mMap.animateCamera(CameraUpdateFactory.newCameraPosition(builder.build()));
+            mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude())).title("You are here!").snippet("Consider yourself located"));
+        }
+
+        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.03, -34.80)).title("Marker1").snippet("OLAR"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.04, -34.87)).title("LAla"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.031, -34.923)).title("Marker"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude())).title("Local"));
         mMap.setMyLocationEnabled(true);
     }
 }
