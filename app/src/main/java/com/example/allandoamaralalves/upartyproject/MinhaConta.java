@@ -15,15 +15,7 @@ public class MinhaConta extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_minha_conta);
 
-        Button btnVoltar = (Button)findViewById(R.id.btn_main_eventos);
 
-        btnVoltar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent actionVoltar = new Intent(MinhaConta.this, MenuInicial.class);
-                //myIntent.putExtra("key", value); //Optional parameters
-                MinhaConta.this.startActivity(actionVoltar);
-            }
-        });
 
     }
 

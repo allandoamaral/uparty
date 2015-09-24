@@ -154,13 +154,13 @@ public class MapaEventos extends FragmentActivity {
             builder.target(target);
 
             this.mMap.animateCamera(CameraUpdateFactory.newCameraPosition(builder.build()));
-            mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude())).title("You are here!").snippet("Consider yourself located"));
+            //mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude())).title("You are here!").snippet("Consider yourself located"));
         }
 
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.03, -34.80)).title("Marker1").snippet("OLAR"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.04, -34.87)).title("LAla"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.031, -34.923)).title("Marker"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude())).title("Local"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0166618659, -34.94987614452839)).title("Calourada UFRPE").snippet("Mesa Farta"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0166618859, -34.94987613452839)).title("Festinha da Marcela"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0166618899, -34.94987614452839)).title("Piscina do Wagner"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0196618899, -34.95987614452839)).title("OpenBar de Toddynho"));
         mMap.setMyLocationEnabled(true);
     }
 }

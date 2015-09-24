@@ -43,7 +43,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_margin="5dp"
-                android:textColor="#FFFF" />
+                android:textColor="#FFFF"
+                android:maxLength="13" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -66,7 +67,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_margin="5dp"
-                android:textColor="#FFFF" />
+                android:textColor="#FFFF"
+                android:maxLength="13" />
         </LinearLayout>
 
     </LinearLayout>
@@ -92,7 +94,7 @@
         android:layout_toEndOf="@+id/btn_criar_evento"
         android:layout_toRightOf="@+id/btn_criar_evento"
         android:layout_alignParentRight="false"
-        android:layout_marginLeft="130dp"
+        android:layout_marginLeft="100dp"
         android:textColor="#FFFF"
         android:background="#ff0039"
         android:padding="5dp" />
