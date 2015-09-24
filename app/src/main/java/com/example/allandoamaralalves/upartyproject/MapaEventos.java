@@ -2,15 +2,21 @@ package com.example.allandoamaralalves.upartyproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -18,6 +24,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+
+import java.io.IOException;
+import java.util.List;
 
 
 public class MapaEventos extends FragmentActivity {
@@ -92,6 +101,38 @@ public class MapaEventos extends FragmentActivity {
         });
     }
 
+    public void geoLocate (View v) throws IOException {
+        hideSoftKeyboard(v);
+
+        EditText et = (EditText) findViewById(R.id.local_procurado);
+        String location = et.getText().toString();
+
+        Geocoder gc = new Geocoder(this);
+        List<Address> list = gc.getFromLocationName(location, 1);
+
+        Address add = list.get(0);
+        //Local retornado da pesquisa
+        String locality = add.getLocality();
+
+        Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
+
+        double lat = add.getLatitude();
+        double lng = add.getLongitude();
+
+        goToLocation(lat, lng);
+    }
+
+    private void goToLocation(double lat, double lng) {
+        LatLng ll = new LatLng(lat, lng);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15);
+        mMap.moveCamera(update);
+    }
+
+    private void hideSoftKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -152,6 +193,12 @@ public class MapaEventos extends FragmentActivity {
             CameraPosition.Builder builder = new CameraPosition.Builder();
             builder.zoom(15);
             builder.target(target);
+
+            TextView t1 = (TextView)findViewById(R.id.long_text);
+            t1.setText(String.valueOf(myLocation.getLongitude()));
+
+            TextView t2 = (TextView)findViewById(R.id.lat_text);
+            t2.setText(String.valueOf(myLocation.getLatitude()));
 
             this.mMap.animateCamera(CameraUpdateFactory.newCameraPosition(builder.build()));
             //mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude())).title("You are here!").snippet("Consider yourself located"));
