@@ -49,6 +49,10 @@
             android:name=".CriarEvento"
             android:label="@string/title_activity_criar_evento" >
         </activity>
+        <activity
+            android:name=".CriarUsuario"
+            android:label="@string/title_activity_criar_usuario" >
+        </activity>
     </application>
 
 </manifest>

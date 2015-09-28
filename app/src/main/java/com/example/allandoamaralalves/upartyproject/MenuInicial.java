@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MenuInicial extends AppCompatActivity {
 
@@ -30,11 +31,23 @@ public class MenuInicial extends AppCompatActivity {
 
         btn2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent actionConta = new Intent(MenuInicial.this, MinhaConta.class);
+                Intent actionConta = new Intent(MenuInicial.this, CriarUsuario.class);
                 //myIntent.putExtra("key", value); //Optional parameters
                 MenuInicial.this.startActivity(actionConta);
             }
         });
+
+        Button btn3 = (Button)findViewById(R.id.btn_main_config);
+
+        btn3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent actionUsuario = new Intent(MenuInicial.this, CriarUsuario.class);
+                //myIntent.putExtra("key", value); //Optional parameters
+                MenuInicial.this.startActivity(actionUsuario);
+            }
+        });
+
+
     }
 
     @Override
