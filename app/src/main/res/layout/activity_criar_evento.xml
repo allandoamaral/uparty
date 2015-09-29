@@ -34,7 +34,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText3"
+            android:id="@+id/txtnome"
             android:layout_gravity="center_horizontal"
             android:layout_margin="5dp" />
 
@@ -114,7 +114,7 @@
             android:layout_height="78dp"
             android:inputType="textMultiLine"
             android:ems="10"
-            android:id="@+id/editText6"
+            android:id="@+id/txtdescricao"
             android:layout_gravity="center_horizontal"
             android:layout_margin="5dp" />
 
@@ -126,16 +126,45 @@
             android:id="@+id/textView5"
             android:layout_margin="5dp" />
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
+        <TextView
+            android:layout_width="308dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/text_latlong"
+            android:layout_margin="5dp"
+            android:textSize="12dp" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Inserir Localização"
-            android:id="@+id/button3"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Cidade:"
+            android:id="@+id/textView12"
+            android:layout_margin="5dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtcidade"
             android:layout_gravity="center_horizontal"
-            android:background="#ff0039"
-            android:textColor="#ffff"
-            android:padding="5dp" />
+            android:layout_margin="5dp"
+            android:hyphenationFrequency="normal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Endereço completo:"
+            android:id="@+id/textView14"
+            android:layout_margin="5dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtendereco"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:hyphenationFrequency="normal" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -175,8 +204,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Criar"
-            android:id="@+id/button6"
-            android:layout_marginLeft="150dp" />
+            android:id="@+id/btn_criar"
+            android:layout_marginLeft="150dp"
+            android:hyphenationFrequency="none" />
     </LinearLayout>
     </LinearLayout>
 

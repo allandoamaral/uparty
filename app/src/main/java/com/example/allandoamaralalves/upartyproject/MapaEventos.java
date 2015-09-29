@@ -2,6 +2,7 @@ package com.example.allandoamaralalves.upartyproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -32,7 +33,9 @@ import java.util.List;
 public class MapaEventos extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private String stringTestante;
+    private Geocoder gc;
+
+    protected boolean criarEventoFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +43,29 @@ public class MapaEventos extends FragmentActivity {
         setContentView(R.layout.activity_mapa_eventos);
         setUpMapIfNeeded();
 
-        Button btn = (Button)findViewById(R.id.btn_criar_evento);
+        //Geocoder para metodos de localizacao
+        gc = new Geocoder(this);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        final Button btnCriarEvento = (Button)findViewById(R.id.btn_criar_evento);
+        //flag para habilitar ou não a seleção do mapa redirecionando pra pagina de criar evento
+        criarEventoFlag = false;
+
+
+        btnCriarEvento.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent actionCriarEvento = new Intent(MapaEventos.this, CriarEvento.class);
-                //myIntent.putExtra("key", value); //Optional parameters
-                MapaEventos.this.startActivity(actionCriarEvento);
+                //Intent actionCriarEvento = new Intent(MapaEventos.this, CriarEvento.class);
+                //MapaEventos.this.startActivity(actionCriarEvento);
+                if (criarEventoFlag) {
+                    criarEventoFlag = false;
+                    btnCriarEvento.setBackgroundColor(16711737);
+                    btnCriarEvento.getBackground().setColorFilter(16711737, PorterDuff.Mode.MULTIPLY);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Selecione no mapa o local de seu evento!", Toast.LENGTH_LONG).show();
+                    btnCriarEvento.setBackgroundColor(6029333);
+                    btnCriarEvento.getBackground().setColorFilter(6029333, PorterDuff.Mode.MULTIPLY);
+                    criarEventoFlag = true;
+                }
+
             }
         });
 
@@ -60,46 +79,59 @@ public class MapaEventos extends FragmentActivity {
             }
         });
 
+        this.setUpMap();
+
         SupportMapFragment supportMapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.map);
 
         // Getting a reference to the map
         mMap = supportMapFragment.getMap();
 
-        // Setting a click event handler for the map
         mMap.setOnMapClickListener(new OnMapClickListener() {
-
             @Override
             public void onMapClick(LatLng latLng) {
+                if (criarEventoFlag) {
+                    // Setting a click event handler for the map
 
-                String longSelecionada = String.valueOf(latLng.longitude);
+                    String longSelecionada = String.valueOf(latLng.longitude);
+                    String latSelecionada = String.valueOf(latLng.latitude);
+                    String cidade = "";
+                    String endereco = "";
 
-                TextView t1 = (TextView)findViewById(R.id.long_text);
-                t1.setText(longSelecionada);
+                    List<Address> list = null;
+                    try {
+                        list = gc.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (list != null & list.size() > 0) {
+                        Address address = list.get(0);
+                        cidade = address.getAddressLine(1);
+                        endereco = address.getAddressLine(0);
+                    }
 
-                String latSelecionada = String.valueOf(latLng.latitude);
+                    Intent actionCriarEvento = new Intent(MapaEventos.this, CriarEvento.class);
+                    actionCriarEvento.putExtra("long", longSelecionada);
+                    actionCriarEvento.putExtra("lat", latSelecionada);
+                    actionCriarEvento.putExtra("cidade", cidade);
+                    actionCriarEvento.putExtra("endereco", endereco);
+                    //Optional parameters
+                    MapaEventos.this.startActivity(actionCriarEvento);
+                } else {
+                    String longSelecionada = String.valueOf(latLng.longitude);
 
-                TextView t2 = (TextView)findViewById(R.id.lat_text);
-                t2.setText(latSelecionada);
+                    TextView t1 = (TextView) findViewById(R.id.long_text);
+                    t1.setText(longSelecionada);
 
-                // Creating a marker
-                //MarkerOptions markerOptions = new MarkerOptions();
+                    String latSelecionada = String.valueOf(latLng.latitude);
 
-                // Setting the position for the marker
-                //markerOptions.position(latLng);
-
-                // Setting the title for the marker.
-                // This will be displayed on taping the marker
-                //markerOptions.title(latLng.latitude + " : " + latLng.longitude);
-
-                // Animating to the touched position
-                //mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-
-                // Placing a marker on the touched position
-                //mMap.addMarker(markerOptions);
+                    TextView t2 = (TextView) findViewById(R.id.lat_text);
+                    t2.setText(latSelecionada);
+                }
             }
         });
     }
+
 
     public void geoLocate (View v) throws IOException {
         hideSoftKeyboard(v);
@@ -107,7 +139,6 @@ public class MapaEventos extends FragmentActivity {
         EditText et = (EditText) findViewById(R.id.local_procurado);
         String location = et.getText().toString();
 
-        Geocoder gc = new Geocoder(this);
         List<Address> list = gc.getFromLocationName(location, 1);
 
         Address add = list.get(0);
@@ -186,7 +217,7 @@ public class MapaEventos extends FragmentActivity {
         Location myLocation = locationManager.getLastKnownLocation(provider);
 
         if (myLocation != null) {
-
+            this.goToLocation(myLocation.getLatitude(), myLocation.getLongitude());
             LatLng target = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
             CameraPosition position = this.mMap.getCameraPosition();
 
@@ -205,8 +236,8 @@ public class MapaEventos extends FragmentActivity {
         }
 
         mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0166618659, -34.94987614452839)).title("Calourada UFRPE").snippet("Mesa Farta"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0166618859, -34.94987613452839)).title("Festinha da Marcela"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0166618899, -34.94987614452839)).title("Piscina do Wagner"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0166618859, -34.94987613352839)).title("Festinha da Marcela"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0166618899, -34.94987614453839)).title("Piscina do Wagner"));
         mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0196618899, -34.95987614452839)).title("OpenBar de Toddynho"));
         mMap.setMyLocationEnabled(true);
     }
