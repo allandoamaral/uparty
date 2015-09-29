@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Criar Novo Usuário"
-            android:id="@+id/button"
+            android:id="@+id/btn_criar_usuario"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp" />
     </LinearLayout>

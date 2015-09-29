@@ -16,7 +16,15 @@ public class MinhaConta extends AppCompatActivity {
         setContentView(R.layout.activity_minha_conta);
 
 
+        Button btnCriar = (Button)findViewById(R.id.btn_criar_usuario);
 
+        btnCriar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent actionCriar = new Intent(MinhaConta.this, CriarUsuario.class);
+                //myIntent.putExtra("key", value); //Optional parameters
+                MinhaConta.this.startActivity(actionCriar);
+            }
+        });
     }
 
     @Override

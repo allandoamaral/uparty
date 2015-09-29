@@ -1,5 +1,8 @@
 package com.example.allandoamaralalves.upartyproject;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View.OnClickListener;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Handler;
 
@@ -22,7 +27,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class CriarUsuario extends AppCompatActivity implements OnClickListener {
@@ -31,15 +38,21 @@ public class CriarUsuario extends AppCompatActivity implements OnClickListener {
     private ProgressDialog pDialog;
 
     JSONParser jsonParser = new JSONParser();
-    private EditText txtusername;
-    private EditText txtpassword;
-    private Button btnsavenew;
-    private int success; //to determine JSON signal insert success/fail
 
-    // url to insert new idiom (change accordingly)
-    private static String url_insert_new = "http://uparty.3eeweb.com/insertnew.php";
+    //Campos de texto
+    private EditText txtnome, txtcidade, txtuf, txtemail, txtusername, txtpassword;
+
+    private Button btn_date, btnsavenew;
+
+    //DatePicker variaveis
+    private int year, month, day;
+    private static final int DATE_DIALOG_ID = 0;
+
+    // url para inserir novo usuario no banco
+    private static String url_insert_new = "http://uparty.3eeweb.com/db_inserir_usuario.php";
 
     // JSON Node names
+    private int success;
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
 
@@ -48,15 +61,58 @@ public class CriarUsuario extends AppCompatActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_criar_usuario);
 
-        // Edit Text
+        // Campos de texto do formulario
+        txtnome = (EditText)findViewById(R.id.textnome);
+        txtcidade = (EditText)findViewById(R.id.textcidade);
+        txtuf = (EditText)findViewById(R.id.textestado);
+        txtemail = (EditText)findViewById(R.id.textemail);
         txtusername = (EditText)findViewById(R.id.textusername);
         txtpassword = (EditText)findViewById(R.id.textpassword);
+
+        final Calendar cal = Calendar.getInstance();
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH);
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        showDialogOnButtonClick();
 
         // Save button
         btnsavenew = (Button) findViewById(R.id.btnsavenew);
         // button click event
         btnsavenew.setOnClickListener(this);
     }
+
+    public void showDialogOnButtonClick() {
+        btn_date = (Button) findViewById(R.id.date_picker_button);
+
+        btn_date.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showDialog(DATE_DIALOG_ID);
+                    }
+                }
+        );
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case (DATE_DIALOG_ID):
+                return new DatePickerDialog(this, dpickerListener, year, month, day);
+        }
+        return null;
+    }
+
+    private DatePickerDialog.OnDateSetListener dpickerListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int yearBirth, int monthOfYear, int dayOfMonth) {
+            year = yearBirth;
+            month = monthOfYear + 1;
+            day = dayOfMonth;
+            TextView t = (TextView)findViewById(R.id.text_data);
+            t.setText(day + "/" + month + "/" + year);
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -80,21 +136,31 @@ public class CriarUsuario extends AppCompatActivity implements OnClickListener {
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(CriarUsuario.this);
-            pDialog.setMessage("Saving the new USER...");
+            pDialog.setMessage("Cadastrando novo usuário...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();
         }
 
         protected String doInBackground(String... args) {
-            //capture values from EditText
+            //resgatar valores dos campos
+            String nome = txtnome.getText().toString();
+            String nascimento = year + "-" + month + "-" + day;
+            String cidade = txtcidade.getText().toString();
+            String uf = txtuf.getText().toString();
+            String email = txtemail.getText().toString();
             String username = txtusername.getText().toString();
             String password = txtpassword.getText().toString();
 
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("username", username));
-            params.add(new BasicNameValuePair("password", password));
+            params.add(new BasicNameValuePair("usuario_nome", nome));
+            params.add(new BasicNameValuePair("usuario_nascimento", nascimento));
+            params.add(new BasicNameValuePair("usuario_cidade", cidade));
+            params.add(new BasicNameValuePair("usuario_uf", uf));
+            params.add(new BasicNameValuePair("usuario_email", email));
+            params.add(new BasicNameValuePair("usuario_username", username));
+            params.add(new BasicNameValuePair("usuario_senha", password));
 
             // sending modified data through http request
             // Notice that update product url accepts POST method
@@ -121,7 +187,7 @@ public class CriarUsuario extends AppCompatActivity implements OnClickListener {
                 e.printStackTrace();
             }
 
-            return null;
+            return "0";
         }
 
         /**
