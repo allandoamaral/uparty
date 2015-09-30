@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -19,12 +21,17 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
+import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,11 +79,20 @@ public class MapaEventos extends FragmentActivity {
     private static final String TAG_LONG = "evento_longitude";
     private static final String TAG_LAT = "evento_latitude";
 
+    //dimensoes tela celular
+    private int screenWidth, screenHeight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa_eventos);
         setUpMapIfNeeded();
+
+        //definir valores de tamanho da tela
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        screenHeight = displaymetrics.heightPixels;
+        screenWidth = displaymetrics.widthPixels;
 
         //Geocoder para metodos de localizacao
         gc = new Geocoder(this);
@@ -268,10 +284,23 @@ public class MapaEventos extends FragmentActivity {
         }
 
         mMap.setMyLocationEnabled(true);
+
+        //Ação realizada ao clicar em um marcador do mapa representando evento existente .
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            public boolean onMarkerClick(Marker marcador) {
+                //Coordenadas "x" e "y" da janela pop-up a ser aberta ao clicar nos marcadores do mapa.
+                //valores sao definidos a partir do tamanho da tela do aparelho.
+                Point pontoPopUp = new Point(screenWidth/15, (int) (screenHeight/7.5));
+
+                showPopup(MapaEventos.this, pontoPopUp, (int) (screenWidth/1.1),
+                        (int) (screenHeight/3.5), marcador.getTitle(), marcador.getSnippet());
+                return true;
+            }
+        });
     }
 
 
-    class LoadAllEvents extends AsyncTask<String, String, String> {
+        class LoadAllEvents extends AsyncTask<String, String, String> {
         private JSONObject json;
         /**
          * Before starting background thread Show Progress Dialog
@@ -336,5 +365,45 @@ public class MapaEventos extends FragmentActivity {
                 }
             }
         }
+    }
+
+    //Criacao das janelas pop-ups ao clicar em um evento do mapa
+    private void showPopup(final Activity context, Point p, int width, int height, String eventoTitulo, String eventoId) {
+        int popupWidth = width;
+        int popupHeight = height;
+
+        //LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popup);
+        LayoutInflater layoutInflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = layoutInflater.inflate(R.layout.popup_layout, null);
+
+        TextView titulo_evento = (TextView) layout.findViewById(R.id.txt_titulo_evento);
+        titulo_evento.setText(eventoTitulo);
+
+        // Creating the PopupWindow
+        final PopupWindow popup = new PopupWindow(context);
+        popup.setContentView(layout);
+        popup.setWidth(popupWidth);
+        popup.setHeight(popupHeight);
+        popup.setFocusable(true);
+
+        // Some offset to align the popup a bit to the right, and a bit down, relative to button's position.
+        int OFFSET_X = 30;
+        int OFFSET_Y = 30;
+
+        // Clear the default translucent background
+        popup.setBackgroundDrawable(new BitmapDrawable());
+
+        // Displaying the popup at the specified location, + offsets.
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, p.x + OFFSET_X, p.y + OFFSET_Y);
+
+        // Getting a reference to Close button, and close the popup when clicked.
+        Button close = (Button) layout.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+            }
+        });
     }
 }
