@@ -1,7 +1,16 @@
 package com.example.allandoamaralalves.upartyproject;
 
-import android.content.Context;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.content.Context;
 import android.graphics.PorterDuff;
 import android.location.Address;
 import android.location.Criteria;
@@ -10,10 +19,13 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,10 +35,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -35,7 +53,24 @@ public class MapaEventos extends FragmentActivity {
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private Geocoder gc;
 
+    private ProgressDialog pDialog;
+    JSONParser jsonParser = new JSONParser();
+    // eventos JSONArray
+    private JSONArray events = null;
+
     protected boolean criarEventoFlag;
+    protected String latSelecionada, longSelecionada, cidade, endereco;
+
+    ArrayList<HashMap<String, String>> listaEventos;
+    private static String url_all_events = "http://uparty.3eeweb.com/db_retornar_eventos.php";
+    // JSON Node names
+    private static final String TAG_SUCCESS = "success";
+    private static final String TAG_EVENTS = "eventos";
+    private static final String TAG_ID = "evento_id";
+    private static final String TAG_NAME = "evento_titulo";
+    private static final String TAG_DESC = "evento_descricao";
+    private static final String TAG_LONG = "evento_longitude";
+    private static final String TAG_LAT = "evento_latitude";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +80,15 @@ public class MapaEventos extends FragmentActivity {
 
         //Geocoder para metodos de localizacao
         gc = new Geocoder(this);
+        latSelecionada = "";
+        longSelecionada = "";
 
         final Button btnCriarEvento = (Button)findViewById(R.id.btn_criar_evento);
         //flag para habilitar ou não a seleção do mapa redirecionando pra pagina de criar evento
         criarEventoFlag = false;
 
+        // Loading products in Background Thread
+        new LoadAllEvents().execute();
 
         btnCriarEvento.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -58,14 +97,22 @@ public class MapaEventos extends FragmentActivity {
                 if (criarEventoFlag) {
                     criarEventoFlag = false;
                     btnCriarEvento.setBackgroundColor(16711737);
-                    btnCriarEvento.getBackground().setColorFilter(16711737, PorterDuff.Mode.MULTIPLY);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Selecione no mapa o local de seu evento!", Toast.LENGTH_LONG).show();
-                    btnCriarEvento.setBackgroundColor(6029333);
-                    btnCriarEvento.getBackground().setColorFilter(6029333, PorterDuff.Mode.MULTIPLY);
-                    criarEventoFlag = true;
+                    if ((longSelecionada != "") && (latSelecionada != "")) {
+                        Intent actionCriarEvento = new Intent(MapaEventos.this, CriarEvento.class);
+                        actionCriarEvento.putExtra("long", longSelecionada);
+                        actionCriarEvento.putExtra("lat", latSelecionada);
+                        actionCriarEvento.putExtra("cidade", cidade);
+                        actionCriarEvento.putExtra("endereco", endereco);
+                        //Optional parameters
+                        MapaEventos.this.startActivity(actionCriarEvento);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Selecione no mapa o local de seu evento!", Toast.LENGTH_LONG).show();
+                        //btnCriarEvento.setBackgroundColor(6029333);
+                        btnCriarEvento.getBackground().setColorFilter(6029333, PorterDuff.Mode.MULTIPLY);
+                        criarEventoFlag = true;
+                    }
                 }
-
             }
         });
 
@@ -92,11 +139,8 @@ public class MapaEventos extends FragmentActivity {
             public void onMapClick(LatLng latLng) {
                 if (criarEventoFlag) {
                     // Setting a click event handler for the map
-
-                    String longSelecionada = String.valueOf(latLng.longitude);
-                    String latSelecionada = String.valueOf(latLng.latitude);
-                    String cidade = "";
-                    String endereco = "";
+                    longSelecionada = String.valueOf(latLng.longitude);
+                    latSelecionada = String.valueOf(latLng.latitude);
 
                     List<Address> list = null;
                     try {
@@ -108,6 +152,9 @@ public class MapaEventos extends FragmentActivity {
                         Address address = list.get(0);
                         cidade = address.getAddressLine(1);
                         endereco = address.getAddressLine(0);
+                    } else {
+                        cidade = "";
+                        endereco = "";
                     }
 
                     Intent actionCriarEvento = new Intent(MapaEventos.this, CriarEvento.class);
@@ -118,15 +165,26 @@ public class MapaEventos extends FragmentActivity {
                     //Optional parameters
                     MapaEventos.this.startActivity(actionCriarEvento);
                 } else {
-                    String longSelecionada = String.valueOf(latLng.longitude);
+                    longSelecionada = String.valueOf(latLng.longitude);
+                    latSelecionada = String.valueOf(latLng.latitude);
 
-                    TextView t1 = (TextView) findViewById(R.id.long_text);
-                    t1.setText(longSelecionada);
+                    List<Address> list = null;
+                    try {
+                        list = gc.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (list != null & list.size() > 0) {
+                        Address address = list.get(0);
+                        cidade = address.getAddressLine(1);
+                        endereco = address.getAddressLine(0);
+                    } else {
+                        cidade = "";
+                        endereco = "";
+                    }
 
-                    String latSelecionada = String.valueOf(latLng.latitude);
-
-                    TextView t2 = (TextView) findViewById(R.id.lat_text);
-                    t2.setText(latSelecionada);
+                    TextView t = (TextView) findViewById(R.id.lat_long_text);
+                    t.setText("Localização selecionada!");
                 }
             }
         });
@@ -170,21 +228,7 @@ public class MapaEventos extends FragmentActivity {
         setUpMapIfNeeded();
     }
 
-    /**
-     * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
-     * installed) and the map has not already been instantiated.. This will ensure that we only ever
-     * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p/>
-     * If it isn't installed {@link SupportMapFragment} (and
-     * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
-     * install/update the Google Play services APK on their device.
-     * <p/>
-     * A user can return to this FragmentActivity after following the prompt and correctly
-     * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
-     * have been completely destroyed during this process (it is likely that it would only be
-     * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
-     * method in {@link #onResume()} to guarantee that it will be called.
-     */
+    //Configuracoes iniciais do maps
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
@@ -198,12 +242,6 @@ public class MapaEventos extends FragmentActivity {
         }
     }
 
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
     private void setUpMap() {
         // Get LocationManager object from System Service LOCATION_SERVICE
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -225,20 +263,78 @@ public class MapaEventos extends FragmentActivity {
             builder.zoom(15);
             builder.target(target);
 
-            TextView t1 = (TextView)findViewById(R.id.long_text);
-            t1.setText(String.valueOf(myLocation.getLongitude()));
-
-            TextView t2 = (TextView)findViewById(R.id.lat_text);
-            t2.setText(String.valueOf(myLocation.getLatitude()));
-
             this.mMap.animateCamera(CameraUpdateFactory.newCameraPosition(builder.build()));
             //mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude())).title("You are here!").snippet("Consider yourself located"));
         }
 
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0166618659, -34.94987614452839)).title("Calourada UFRPE").snippet("Mesa Farta"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0166618859, -34.94987613352839)).title("Festinha da Marcela"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0166618899, -34.94987614453839)).title("Piscina do Wagner"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-8.0196618899, -34.95987614452839)).title("OpenBar de Toddynho"));
         mMap.setMyLocationEnabled(true);
+    }
+
+
+    class LoadAllEvents extends AsyncTask<String, String, String> {
+        private JSONObject json;
+        /**
+         * Before starting background thread Show Progress Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(MapaEventos.this);
+            pDialog.setMessage("Loading events. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        /**
+         * getting All products from url
+         * */
+        protected String doInBackground(String... args) {
+            // Building Parameters
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            // getting JSON string from URL
+            json = jsonParser.makeHttpRequest(url_all_events, "GET", params);
+
+            // Check your log cat for JSON reponse
+            Log.d("All Products: ", json.toString());
+
+            try {
+                // Checking for SUCCESS TAG
+                int success = json.getInt(TAG_SUCCESS);
+
+                if (success == 1) {
+                    // retornando json array de eventos
+                    events = json.getJSONArray(TAG_EVENTS);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog after getting all products
+            pDialog.dismiss();
+            // percorrendo todos os eventos
+            for (int i = 0; i < events.length(); i++) {
+                JSONObject c = null;
+                try {
+                    c = events.getJSONObject(i);
+                    String id = c.getString(TAG_ID);
+                    String name = c.getString(TAG_NAME);
+                    String description = c.getString(TAG_DESC);
+                    String lat = c.getString(TAG_LAT);
+                    String lng = c.getString(TAG_LONG);
+
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng))).title(name).snippet(description));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

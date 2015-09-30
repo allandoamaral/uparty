@@ -53,49 +53,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Long/Lat:"
-                android:id="@+id/textView7"
-                android:layout_above="@+id/btn_criar_evento"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_margin="5dp"
-                android:textColor="#FFFF" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/long_text"
+                android:id="@+id/lat_long_text"
                 android:layout_above="@+id/btn_criar_evento"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_margin="5dp"
                 android:textColor="#FFFF"
-                android:maxLength="11" />
+                android:textSize="12dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="/"
-                android:id="@+id/textView8"
-                android:layout_above="@+id/btn_criar_evento"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_margin="5dp"
-                android:textColor="#FFFF" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/lat_text"
-                android:layout_above="@+id/btn_criar_evento"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_margin="5dp"
-                android:textColor="#FFFF"
-                android:maxLength="11" />
         </LinearLayout>
 
     </LinearLayout>
