@@ -7,29 +7,24 @@ import android.app.TimePickerDialog;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View.OnClickListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Handler;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.app.Activity;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,7 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TimePicker;
 
-public class CriarEvento extends AppCompatActivity {
+public class TelaCriarEvento extends AppCompatActivity {
 
     // Progress Dialog
     private ProgressDialog pDialog;
@@ -110,9 +105,9 @@ public class CriarEvento extends AppCompatActivity {
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent actionVoltar = new Intent(CriarEvento.this, MapaEventos.class);
+                Intent actionVoltar = new Intent(TelaCriarEvento.this, TelaMapaEventos.class);
                 //myIntent.putExtra("key", value); //Optional parameters
-                CriarEvento.this.startActivity(actionVoltar);
+                TelaCriarEvento.this.startActivity(actionVoltar);
             }
         });
 
@@ -134,7 +129,7 @@ public class CriarEvento extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(CriarEvento.this);
+            pDialog = new ProgressDialog(TelaCriarEvento.this);
             pDialog.setMessage("Cadastrando novo evento...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
@@ -257,7 +252,7 @@ public class CriarEvento extends AppCompatActivity {
             event_month = monthOfYear + 1;
             event_day = dayOfMonth;
             //Aviso na tela
-            //Toast.makeText(CriarEvento.this, day_x + "/" + month_x + "/" + year_x, Toast.LENGTH_LONG).show();
+            //Toast.makeText(TelaCriarEvento.this, day_x + "/" + month_x + "/" + year_x, Toast.LENGTH_LONG).show();
             TextView t = (TextView)findViewById(R.id.text_data);
             t.setText(event_day + "/" + event_month + "/" + event_year);
         }

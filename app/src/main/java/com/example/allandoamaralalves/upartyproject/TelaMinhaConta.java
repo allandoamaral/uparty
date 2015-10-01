@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class MinhaConta extends AppCompatActivity {
+public class TelaMinhaConta extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,9 +20,9 @@ public class MinhaConta extends AppCompatActivity {
 
         btnCriar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent actionCriar = new Intent(MinhaConta.this, CriarUsuario.class);
+                Intent actionCriar = new Intent(TelaMinhaConta.this, TelaCriarUsuario.class);
                 //myIntent.putExtra("key", value); //Optional parameters
-                MinhaConta.this.startActivity(actionCriar);
+                TelaMinhaConta.this.startActivity(actionCriar);
             }
         });
     }
@@ -50,8 +50,8 @@ public class MinhaConta extends AppCompatActivity {
     }
 
     public void actionVoltar() {
-        Intent actionInicial = new Intent(MinhaConta.this, MenuInicial.class);
+        Intent actionInicial = new Intent(TelaMinhaConta.this, TelaMenuInicial.class);
         //myIntent.putExtra("key", value); //Optional parameters
-        MinhaConta.this.startActivity(actionInicial);
+        TelaMinhaConta.this.startActivity(actionInicial);
     }
 }

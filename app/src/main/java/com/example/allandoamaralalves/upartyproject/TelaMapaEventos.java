@@ -29,10 +29,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.PopupWindow;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,16 +43,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 
-public class MapaEventos extends FragmentActivity {
+public class TelaMapaEventos extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private Geocoder gc;
@@ -66,7 +60,9 @@ public class MapaEventos extends FragmentActivity {
     private JSONArray events = null;
 
     protected boolean criarEventoFlag;
-    protected String latSelecionada, longSelecionada, cidade, endereco;
+
+    //Valores usados na chamada das telas Criar Evento e Visualizar Evento.
+    protected String latSelecionada, longSelecionada, cidade, endereco, eventoId;
 
     ArrayList<HashMap<String, String>> listaEventos;
     private static String url_all_events = "http://uparty.3eeweb.com/db_retornar_eventos.php";
@@ -108,20 +104,20 @@ public class MapaEventos extends FragmentActivity {
 
         btnCriarEvento.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //Intent actionCriarEvento = new Intent(MapaEventos.this, CriarEvento.class);
-                //MapaEventos.this.startActivity(actionCriarEvento);
+                //Intent actionCriarEvento = new Intent(TelaMapaEventos.this, TelaCriarEvento.class);
+                //TelaMapaEventos.this.startActivity(actionCriarEvento);
                 if (criarEventoFlag) {
                     criarEventoFlag = false;
                     btnCriarEvento.setBackgroundColor(16711737);
                 } else {
                     if ((longSelecionada != "") && (latSelecionada != "")) {
-                        Intent actionCriarEvento = new Intent(MapaEventos.this, CriarEvento.class);
+                        Intent actionCriarEvento = new Intent(TelaMapaEventos.this, TelaCriarEvento.class);
                         actionCriarEvento.putExtra("long", longSelecionada);
                         actionCriarEvento.putExtra("lat", latSelecionada);
                         actionCriarEvento.putExtra("cidade", cidade);
                         actionCriarEvento.putExtra("endereco", endereco);
                         //Optional parameters
-                        MapaEventos.this.startActivity(actionCriarEvento);
+                        TelaMapaEventos.this.startActivity(actionCriarEvento);
                     } else {
                         Toast.makeText(getApplicationContext(), "Selecione no mapa o local de seu evento!", Toast.LENGTH_LONG).show();
                         //btnCriarEvento.setBackgroundColor(6029333);
@@ -136,9 +132,9 @@ public class MapaEventos extends FragmentActivity {
 
         btn2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent actionMeusEventos = new Intent(MapaEventos.this, MenuInicial.class);
+                Intent actionMeusEventos = new Intent(TelaMapaEventos.this, TelaMenuInicial.class);
                 //myIntent.putExtra("key", value); //Optional parameters
-                MapaEventos.this.startActivity(actionMeusEventos);
+                TelaMapaEventos.this.startActivity(actionMeusEventos);
             }
         });
 
@@ -173,13 +169,13 @@ public class MapaEventos extends FragmentActivity {
                         endereco = "";
                     }
 
-                    Intent actionCriarEvento = new Intent(MapaEventos.this, CriarEvento.class);
+                    Intent actionCriarEvento = new Intent(TelaMapaEventos.this, TelaCriarEvento.class);
                     actionCriarEvento.putExtra("long", longSelecionada);
                     actionCriarEvento.putExtra("lat", latSelecionada);
                     actionCriarEvento.putExtra("cidade", cidade);
                     actionCriarEvento.putExtra("endereco", endereco);
                     //Optional parameters
-                    MapaEventos.this.startActivity(actionCriarEvento);
+                    TelaMapaEventos.this.startActivity(actionCriarEvento);
                 } else {
                     longSelecionada = String.valueOf(latLng.longitude);
                     latSelecionada = String.valueOf(latLng.latitude);
@@ -292,7 +288,7 @@ public class MapaEventos extends FragmentActivity {
                 //valores sao definidos a partir do tamanho da tela do aparelho.
                 Point pontoPopUp = new Point(screenWidth/15, (int) (screenHeight/7.5));
 
-                showPopup(MapaEventos.this, pontoPopUp, (int) (screenWidth/1.1),
+                showPopup(TelaMapaEventos.this, pontoPopUp, (int) (screenWidth/1.1),
                         (int) (screenHeight/3.5), marcador.getTitle(), marcador.getSnippet());
                 return true;
             }
@@ -308,7 +304,7 @@ public class MapaEventos extends FragmentActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(MapaEventos.this);
+            pDialog = new ProgressDialog(TelaMapaEventos.this);
             pDialog.setMessage("Loading events. Please wait...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
@@ -355,11 +351,10 @@ public class MapaEventos extends FragmentActivity {
                     c = events.getJSONObject(i);
                     String id = c.getString(TAG_ID);
                     String name = c.getString(TAG_NAME);
-                    String description = c.getString(TAG_DESC);
                     String lat = c.getString(TAG_LAT);
                     String lng = c.getString(TAG_LONG);
 
-                    Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng))).title(name).snippet(description));
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng))).title(name).snippet(id));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -368,15 +363,15 @@ public class MapaEventos extends FragmentActivity {
     }
 
     //Criacao das janelas pop-ups ao clicar em um evento do mapa
-    private void showPopup(final Activity context, Point p, int width, int height, String eventoTitulo, String eventoId) {
+    private void showPopup(final Activity context, Point p, int width, int height, String eventoTitulo, String evento_id) {
         int popupWidth = width;
         int popupHeight = height;
 
+        eventoId = evento_id;
         //LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popup);
         LayoutInflater layoutInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = layoutInflater.inflate(R.layout.popup_layout, null);
-
         TextView titulo_evento = (TextView) layout.findViewById(R.id.txt_titulo_evento);
         titulo_evento.setText(eventoTitulo);
 
@@ -403,6 +398,16 @@ public class MapaEventos extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 popup.dismiss();
+            }
+        });
+
+        Button info = (Button) layout.findViewById(R.id.btn_mais_info);
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent actionVisualizarEvento = new Intent(TelaMapaEventos.this, TelaVisualizarEvento.class);
+                actionVisualizarEvento.putExtra("evento_id", eventoId);
+                TelaMapaEventos.this.startActivity(actionVisualizarEvento);
             }
         });
     }

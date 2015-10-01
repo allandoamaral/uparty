@@ -21,7 +21,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MenuInicial"
+            android:name=".TelaMenuInicial"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MinhaConta"
+            android:name=".TelaMinhaConta"
             android:label="@string/title_activity_minha_conta" >
         </activity>
 
@@ -42,16 +42,20 @@
             android:value="AIzaSyAPSr5qNjWvmYsdKEDsf8d5IPv2HSg-efg" />
 
         <activity
-            android:name=".MapaEventos"
+            android:name=".TelaMapaEventos"
             android:label="@string/title_activity_mapa_eventos" >
         </activity>
         <activity
-            android:name=".CriarEvento"
+            android:name=".TelaCriarEvento"
             android:label="@string/title_activity_criar_evento" >
         </activity>
         <activity
-            android:name=".CriarUsuario"
+            android:name=".TelaCriarUsuario"
             android:label="@string/title_activity_criar_usuario" >
+        </activity>
+        <activity
+            android:name=".TelaVisualizarEvento"
+            android:label="@string/title_activity_tela_visualizar_evento" >
         </activity>
     </application>
 

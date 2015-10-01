@@ -1,16 +1,14 @@
 package com.example.allandoamaralalves.upartyproject;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-public class MenuInicial extends AppCompatActivity {
+public class TelaMenuInicial extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +19,9 @@ public class MenuInicial extends AppCompatActivity {
 
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent actionEventos = new Intent(MenuInicial.this, MapaEventos.class);
+                Intent actionEventos = new Intent(TelaMenuInicial.this, TelaMapaEventos.class);
                 //myIntent.putExtra("key", value); //Optional parameters
-                MenuInicial.this.startActivity(actionEventos);
+                TelaMenuInicial.this.startActivity(actionEventos);
             }
         });
 
@@ -31,9 +29,9 @@ public class MenuInicial extends AppCompatActivity {
 
         btn2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent actionConta = new Intent(MenuInicial.this, MinhaConta.class);
+                Intent actionConta = new Intent(TelaMenuInicial.this, TelaMinhaConta.class);
                 //myIntent.putExtra("key", value); //Optional parameters
-                MenuInicial.this.startActivity(actionConta);
+                TelaMenuInicial.this.startActivity(actionConta);
             }
         });
 
@@ -41,9 +39,9 @@ public class MenuInicial extends AppCompatActivity {
 
         btn3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent actionUsuario = new Intent(MenuInicial.this, MinhaConta.class);
+                Intent actionUsuario = new Intent(TelaMenuInicial.this, TelaMinhaConta.class);
                 //myIntent.putExtra("key", value); //Optional parameters
-                MenuInicial.this.startActivity(actionUsuario);
+                TelaMenuInicial.this.startActivity(actionUsuario);
             }
         });
 

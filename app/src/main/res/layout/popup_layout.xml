@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="31dp"
             android:text="Mais informações"
-            android:id="@+id/button"
+            android:id="@+id/btn_mais_info"
             android:textSize="14dp"
             android:elegantTextHeight="false"
             android:background="#ffffff"

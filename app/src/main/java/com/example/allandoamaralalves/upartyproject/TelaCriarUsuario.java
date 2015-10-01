@@ -2,28 +2,21 @@ package com.example.allandoamaralalves.upartyproject;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View.OnClickListener;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Handler;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.app.Activity;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,7 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CriarUsuario extends AppCompatActivity implements OnClickListener {
+public class TelaCriarUsuario extends AppCompatActivity implements OnClickListener {
 
     // Progress Dialog
     private ProgressDialog pDialog;
@@ -135,7 +128,7 @@ public class CriarUsuario extends AppCompatActivity implements OnClickListener {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(CriarUsuario.this);
+            pDialog = new ProgressDialog(TelaCriarUsuario.this);
             pDialog.setMessage("Cadastrando novo usuário...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
