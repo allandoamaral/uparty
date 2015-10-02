@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Evento {
     private int id, criador_id;
-    private String titulo, descricao, bairro, endereco, img;
+    private String titulo, descricao, cidade, endereco, img;
     private Date data_hora;
     private double longitude, latitude;
 
@@ -40,12 +40,12 @@ public class Evento {
         this.descricao = descricao;
     }
 
-    public String getBairro() {
-        return bairro;
+    public String getCidade() {
+        return cidade;
     }
 
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 
     public String getEndereco() {

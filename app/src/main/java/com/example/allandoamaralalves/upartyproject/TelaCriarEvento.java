@@ -14,11 +14,10 @@ import android.view.MenuItem;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,30 +34,18 @@ import android.widget.Toast;
 import android.widget.TimePicker;
 
 public class TelaCriarEvento extends AppCompatActivity {
-
     // Progress Dialog
     private ProgressDialog pDialog;
-
-    JSONParser jsonParser = new JSONParser();
 
     //Campos de texto
     private EditText txtnome, txtdescricao, txtcidade, txtendereco;
     private String latitude, longitude;
-
 
     Button btn_date, btn_time;
     //Valores da data do evento
     int event_year, event_month, event_day, event_hour, event_minute;
     static final int DATE_DIALOG_ID = 0;
     static final int TIME_DIALOG_ID = 1;
-
-    // url para inserir novo evento no banco
-    private static String url_insert_new = "http://uparty.3eeweb.com/db_inserir_evento.php";
-
-    // JSON Node names
-    private int success;
-    private static final String TAG_SUCCESS = "success";
-    private static final String TAG_MESSAGE = "message";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +112,6 @@ public class TelaCriarEvento extends AppCompatActivity {
         /**
          * Before starting background thread Show Progress Dialog *
          */
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -137,49 +123,19 @@ public class TelaCriarEvento extends AppCompatActivity {
         }
 
         protected String doInBackground(String... args) {
-            //resgatar valores dos campos
-            String nome = txtnome.getText().toString();
-            String descricao = txtdescricao.getText().toString();
-            String cidade = txtcidade.getText().toString();
-            String endereco = txtendereco.getText().toString();
-            String data = event_year + "-" + event_month + "-" + event_day + " " + event_hour + ":" + event_minute + ":00";
+            Evento evento = new Evento();
+            evento.setTitulo(txtnome.getText().toString());
+            evento.setDescricao(txtdescricao.getText().toString());
+            evento.setCidade(txtcidade.getText().toString());
+            evento.setEndereco(txtendereco.getText().toString());
+            evento.setData_hora(new Date(event_year, event_month, event_day, event_hour, event_minute));
+            evento.setLatitude(Double.parseDouble(latitude));
+            evento.setLongitude(Double.parseDouble(longitude));
 
-            // Building Parameters
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("evento_nome", nome));
-            params.add(new BasicNameValuePair("evento_descricao", descricao));
-            params.add(new BasicNameValuePair("evento_cidade", cidade));
-            params.add(new BasicNameValuePair("evento_endereco", endereco));
-            params.add(new BasicNameValuePair("evento_data_hora", data));
-            params.add(new BasicNameValuePair("evento_longitude", longitude));
-            params.add(new BasicNameValuePair("evento_latitude", latitude));
+            EventoDAO dao = new EventoDAO();
 
-            // sending modified data through http request
-            // Notice that update product url accepts POST method
-            JSONObject json = jsonParser.makeHttpRequest(url_insert_new,
-                    "GET", params);
-
-            // check log cat fro response
-            Log.d("Create Response", json.toString());
-
-            // check json success tag
-            try {
-                success = json.getInt(TAG_SUCCESS);
-
-                if (success == 1) {
-                    // successfully updated
-                    Intent i = getIntent();
-                    // send result code 100 to notify about product update
-                    //setResult(100, i);
-                    return "1";
-                } else {
-                    // failed to update product
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return "0";
+            String resultado = dao.inserirEvento(evento);
+            return resultado;
         }
 
         /**
