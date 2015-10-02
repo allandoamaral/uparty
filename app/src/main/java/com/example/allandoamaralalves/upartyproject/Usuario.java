@@ -10,6 +10,8 @@ public class Usuario {
     private String nome;
     private Date dataNascimento;
     private String cidade;
+    private String uf;
+    private String email;
     private String nomeUsuario;
     private String senha;
 
@@ -60,4 +62,21 @@ public class Usuario {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
+    public String getUf() {
+        return uf;
+    }
+
+    public void setUf(String uf) {
+        this.uf = uf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 }

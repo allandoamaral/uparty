@@ -7,12 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View.OnClickListener;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -30,8 +26,6 @@ public class TelaCriarUsuario extends AppCompatActivity implements OnClickListen
     // Progress Dialog
     private ProgressDialog pDialog;
 
-    JSONParser jsonParser = new JSONParser();
-
     //Campos de texto
     private EditText txtnome, txtcidade, txtuf, txtemail, txtusername, txtpassword;
 
@@ -40,14 +34,6 @@ public class TelaCriarUsuario extends AppCompatActivity implements OnClickListen
     //DatePicker variaveis
     private int year, month, day;
     private static final int DATE_DIALOG_ID = 0;
-
-    // url para inserir novo usuario no banco
-    private static String url_insert_new = "http://uparty.3eeweb.com/db_inserir_usuario.php";
-
-    // JSON Node names
-    private int success;
-    private static final String TAG_SUCCESS = "success";
-    private static final String TAG_MESSAGE = "message";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +110,6 @@ public class TelaCriarUsuario extends AppCompatActivity implements OnClickListen
         /**
          * Before starting background thread Show Progress Dialog *
          */
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -136,51 +121,22 @@ public class TelaCriarUsuario extends AppCompatActivity implements OnClickListen
         }
 
         protected String doInBackground(String... args) {
+            //criar usuario
+            Usuario user = new Usuario();
+
             //resgatar valores dos campos
-            String nome = txtnome.getText().toString();
-            String nascimento = year + "-" + month + "-" + day;
-            String cidade = txtcidade.getText().toString();
-            String uf = txtuf.getText().toString();
-            String email = txtemail.getText().toString();
-            String username = txtusername.getText().toString();
-            String password = txtpassword.getText().toString();
-
-            // Building Parameters
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("usuario_nome", nome));
-            params.add(new BasicNameValuePair("usuario_nascimento", nascimento));
-            params.add(new BasicNameValuePair("usuario_cidade", cidade));
-            params.add(new BasicNameValuePair("usuario_uf", uf));
-            params.add(new BasicNameValuePair("usuario_email", email));
-            params.add(new BasicNameValuePair("usuario_username", username));
-            params.add(new BasicNameValuePair("usuario_senha", password));
-
-            // sending modified data through http request
-            // Notice that update product url accepts POST method
-            JSONObject json = jsonParser.makeHttpRequest(url_insert_new,
-                    "GET", params);
-
-            // check log cat fro response
-            Log.d("Create Response", json.toString());
-
-            // check json success tag
-            try {
-                success = json.getInt(TAG_SUCCESS);
-
-                if (success == 1) {
-                    // successfully updated
-                    Intent i = getIntent();
-                    // send result code 100 to notify about product update
-                    //setResult(100, i);
-                    return "1";
-                } else {
-                    // failed to update product
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return "0";
+            user.setNome(txtnome.getText().toString());
+            user.setDataNascimento(new Date(year, month, day));
+            user.setCidade(txtcidade.getText().toString());
+            user.setUf(txtuf.getText().toString());
+            user.setEmail(txtemail.getText().toString());
+            user.setNomeUsuario(txtusername.getText().toString());
+            user.setSenha(txtpassword.getText().toString());
+            
+            UsuarioDAO dao = new UsuarioDAO();
+            
+            int resultado = dao.inserirUsuario(user);
+            return (String.valueOf(resultado));
         }
 
         /**
