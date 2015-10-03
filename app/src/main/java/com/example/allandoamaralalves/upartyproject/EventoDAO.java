@@ -6,30 +6,42 @@ import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EventoDAO {
-    JSONParser jsonParser = new JSONParser();
+    private JSONParser jsonParser = new JSONParser();
+    private JSONObject json;
 
     // url para inserir novo evento no banco
     private static String url_insert_new = "http://uparty.3eeweb.com/db_inserir_evento.php";
+    private static String url_event_details = "http://uparty.3eeweb.com/db_retornar_evento.php";
 
-    // JSON Node names
+    // JSON tags
     private String success = "0";
     private static final String TAG_SUCCESS = "success";
+    private static final String TAG_EVENT = "evento";
 
     //Tags para os campos da tabela Eventos no bando de dados
-    private static final String TAG_TITULO = "evento_nome";
+    private static final String TAG_ID = "evento_id";
+    private static final String TAG_TITULO = "evento_titulo";
     private static final String TAG_DESC = "evento_descricao";
     private static final String TAG_CIDADE = "evento_cidade";
     private static final String TAG_ENDERECO = "evento_endereco";
     private static final String TAG_DATA = "evento_data_hora";
     private static final String TAG_LNG = "evento_longitude";
     private static final String TAG_LAT = "evento_latitude";
+
+    private JSONArray eventoJson = null;
+    private Evento eventoObj;
 
     public String inserirEvento(Evento evento) {
         // Building Parameters
@@ -61,5 +73,37 @@ public class EventoDAO {
         }
 
         return success;
+    }
+
+    public Evento buscarEvento(int eventoId) {
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("evento_id", String.valueOf(eventoId)));
+        // getting JSON string from URL
+        json = jsonParser.makeHttpRequest(url_event_details, "GET", params);
+        eventoObj = new Evento();
+        // Check your log cat for JSON reponse
+        Log.d("Event: ", json.toString());
+        try {
+            // Checking for SUCCESS TAG
+            int success = json.getInt(TAG_SUCCESS);
+            if (success == 1) {
+                // retornando json array de eventos
+                eventoJson = json.getJSONArray(TAG_EVENT);
+                JSONObject c = eventoJson.getJSONObject(0);
+                // set resultado em objeto evento
+                eventoObj.setId(Integer.parseInt(c.getString(TAG_ID)));
+                eventoObj.setTitulo(c.getString(TAG_TITULO));
+                eventoObj.setDescricao(c.getString(TAG_DESC));
+                eventoObj.setEndereco(c.getString(TAG_ENDERECO));
+                eventoObj.setCidade(c.getString(TAG_CIDADE));
+                eventoObj.setDataString(c.getString(TAG_DATA));
+                eventoObj.setLongitude(Double.parseDouble(c.getString(TAG_LNG)));
+                eventoObj.setLatitude(Double.parseDouble(c.getString(TAG_LAT)));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return eventoObj;
     }
 }

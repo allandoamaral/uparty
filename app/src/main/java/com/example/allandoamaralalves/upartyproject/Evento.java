@@ -4,7 +4,21 @@ import java.util.Date;
 
 public class Evento {
     private int id, criador_id;
-    private String titulo, descricao, cidade, endereco, img;
+    private String titulo;
+    private String descricao;
+    private String cidade;
+    private String endereco;
+    private String img;
+
+    public String getDataString() {
+        return dataString;
+    }
+
+    public void setDataString(String dataString) {
+        this.dataString = dataString;
+    }
+
+    private String dataString;
     private Date data_hora;
     private double longitude, latitude;
 

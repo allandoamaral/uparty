@@ -31,13 +31,10 @@ public class TelaVisualizarEvento extends AppCompatActivity {
     // JSON parser class
     JSONParser jsonParser = new JSONParser();
     private JSONArray evento = null;
-
-    // url da consulta ao banco via servidor externo / uso de php e json
-    private static String url_event_details = "http://uparty.3eeweb.com/db_retornar_evento.php";
+    private Evento eventoObj;
 
     private static final String TAG_ID = "evento_id";
     private static final String TAG_SUCCESS = "success";
-    private static final String TAG_EVENT = "evento";
     private static final String TAG_NAME = "evento_titulo";
     private static final String TAG_DESCRIPTION = "evento_descricao";
     private static final String TAG_ADDRESS = "evento_endereco";
@@ -54,7 +51,6 @@ public class TelaVisualizarEvento extends AppCompatActivity {
         // buscando o parametro evento_id enviado pela tela anterior
         Intent i = getIntent();
         eventoId = i.getStringExtra(TAG_ID);
-
         new GetEventDetails().execute();
     }
 
@@ -102,26 +98,8 @@ public class TelaVisualizarEvento extends AppCompatActivity {
          * Getting product details in background thread
          * */
         protected String doInBackground(String... args) {
-            // Building Parameters
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("evento_id", eventoId));
-            // getting JSON string from URL
-            json = jsonParser.makeHttpRequest(url_event_details, "GET", params);
-
-            // Check your log cat for JSON reponse
-            Log.d("Event: ", json.toString());
-            try {
-                // Checking for SUCCESS TAG
-                int success = json.getInt(TAG_SUCCESS);
-
-                if (success == 1) {
-                    // retornando json array de eventos
-                    evento = json.getJSONArray(TAG_EVENT);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
+            EventoDAO dao = new EventoDAO();
+            eventoObj = dao.buscarEvento(Integer.parseInt(eventoId));
             return null;
         }
 
@@ -133,6 +111,7 @@ public class TelaVisualizarEvento extends AppCompatActivity {
             pDialog.dismiss();
             // product with this pid found
             // Edit Text
+            System.out.println("LALA - 2");
             txtTitulo = (TextView) findViewById(R.id.txt_titulo);
             txtDescricao = (TextView) findViewById(R.id.txt_descricao);
             txtEndereco = (TextView) findViewById(R.id.txt_endereco);
@@ -141,20 +120,13 @@ public class TelaVisualizarEvento extends AppCompatActivity {
             txtLongitude = (TextView) findViewById(R.id.txt_longitude);
             txtLatitude = (TextView) findViewById(R.id.txt_latitude);
 
-            JSONObject c = null;
-            try {
-                c = evento.getJSONObject(0);
-                // display product data in EditText
-                txtTitulo.setText(c.getString(TAG_NAME));
-                txtDescricao.setText(c.getString(TAG_DESCRIPTION));
-                txtEndereco.setText(c.getString(TAG_ADDRESS));
-                txtCidade.setText(c.getString(TAG_CITY));
-                txtData.setText(c.getString(TAG_DATE));
-                txtLongitude.setText(c.getString(TAG_LONG));
-                txtLatitude.setText(c.getString(TAG_LAT));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            txtTitulo.setText(eventoObj.getTitulo());
+            txtDescricao.setText(eventoObj.getDescricao());
+            txtEndereco.setText(eventoObj.getEndereco());
+            txtCidade.setText(eventoObj.getCidade());
+            txtData.setText(eventoObj.getDataString());
+            txtLongitude.setText(String.valueOf(eventoObj.getLongitude()));
+            txtLatitude.setText(String.valueOf(eventoObj.getLatitude()));
         }
     }
 }
