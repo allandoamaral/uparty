@@ -23,7 +23,7 @@ import android.widget.TextView;
 public class TelaVisualizarEvento extends AppCompatActivity {
 
     private String eventoId;
-    protected TextView txtTitulo, txtDescricao, txtEndereco, txtData, txtCidade, txtLatitude, txtLongitude;
+    protected TextView txtTitulo, txtDescricao, txtEndereco, txtData, txtHora, txtCidade;
 
     // Progress Dialog
     private ProgressDialog pDialog;
@@ -111,22 +111,20 @@ public class TelaVisualizarEvento extends AppCompatActivity {
             pDialog.dismiss();
             // product with this pid found
             // Edit Text
-            System.out.println("LALA - 2");
             txtTitulo = (TextView) findViewById(R.id.txt_titulo);
             txtDescricao = (TextView) findViewById(R.id.txt_descricao);
             txtEndereco = (TextView) findViewById(R.id.txt_endereco);
             txtCidade = (TextView) findViewById(R.id.txt_cidade);
             txtData = (TextView) findViewById(R.id.txt_data);
-            txtLongitude = (TextView) findViewById(R.id.txt_longitude);
-            txtLatitude = (TextView) findViewById(R.id.txt_latitude);
+            txtHora = (TextView) findViewById(R.id.txt_hora);
 
             txtTitulo.setText(eventoObj.getTitulo());
             txtDescricao.setText(eventoObj.getDescricao());
             txtEndereco.setText(eventoObj.getEndereco());
             txtCidade.setText(eventoObj.getCidade());
-            txtData.setText(eventoObj.getDataString());
-            txtLongitude.setText(String.valueOf(eventoObj.getLongitude()));
-            txtLatitude.setText(String.valueOf(eventoObj.getLatitude()));
+            txtData.setText(eventoObj.getDataString().substring(5, 7) + "/" +
+                    eventoObj.getDataString().substring(8, 10) + "/" + eventoObj.getDataString().substring(0, 4));
+            txtHora.setText(eventoObj.getDataString().substring(10, 16));
         }
     }
 }

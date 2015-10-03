@@ -22,6 +22,7 @@ public class UsuarioDAO {
     // JSON Node names
     private int success = 0;
     private static final String TAG_SUCCESS = "success";
+    private static final String TAG_USUARIO = "usuario";
 
     //Tags para os campos da tabela Usuarios no bando de dados
     private static final String TAG_NOME = "usuario_nome";
@@ -44,7 +45,7 @@ public class UsuarioDAO {
         params.add(new BasicNameValuePair(TAG_SENHA, usuario.getSenha()));
 
         // sending modified data through http request
-        // Notice that update product url accepts POST method
+        // Notice that update product url accepts POST met8hod
         JSONObject json = jsonParser.makeHttpRequest(url_insert_new,
                 "GET", params);
 
@@ -60,4 +61,28 @@ public class UsuarioDAO {
 
         return success;
     }
+
+    /*public int logarUsuario (String username, String senha) {
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair(TAG_USER, username));
+        params.add(new BasicNameValuePair(TAG_SENHA, senha));
+        // getting JSON string from URL
+        json = jsonParser.makeHttpRequest(url_user_login, "GET", params);
+
+        try {
+            // Checking for SUCCESS TAG
+            int success = json.getInt(TAG_SUCCESS);
+            if (success == 1) {
+                // retornando json array de eventos
+                usuarioJson = json.getJSONArray(TAG_USUARIO);
+                JSONObject c = eventoJson.getJSONObject(0);
+                // set resultado em objeto evento
+                return Integer.parseInt(c.getString(TAG_ID));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }*/
 }

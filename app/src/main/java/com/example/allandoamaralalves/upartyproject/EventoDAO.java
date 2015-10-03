@@ -78,7 +78,7 @@ public class EventoDAO {
     public Evento buscarEvento(int eventoId) {
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("evento_id", String.valueOf(eventoId)));
+        params.add(new BasicNameValuePair(TAG_ID, String.valueOf(eventoId)));
         // getting JSON string from URL
         json = jsonParser.makeHttpRequest(url_event_details, "GET", params);
         eventoObj = new Evento();

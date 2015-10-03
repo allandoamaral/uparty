@@ -9,6 +9,9 @@ public class Evento {
     private String cidade;
     private String endereco;
     private String img;
+    private String dataString;
+    private Date data_hora;
+    private double longitude, latitude;
 
     public String getDataString() {
         return dataString;
@@ -18,9 +21,7 @@ public class Evento {
         this.dataString = dataString;
     }
 
-    private String dataString;
-    private Date data_hora;
-    private double longitude, latitude;
+
 
     public int getId() {
         return id;
