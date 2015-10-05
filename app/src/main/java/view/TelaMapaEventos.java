@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
@@ -21,6 +22,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,6 +31,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,6 +84,9 @@ public class TelaMapaEventos extends FragmentActivity {
     //dimensoes tela celular
     private int screenWidth, screenHeight;
 
+    //Valor salvo do usuario logado no Shared Preferences (session)
+    private String prefId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,48 +104,66 @@ public class TelaMapaEventos extends FragmentActivity {
         latSelecionada = "";
         longSelecionada = "";
 
-        final Button btnCriarEvento = (Button)findViewById(R.id.btn_criar_evento);
+
         //flag para habilitar ou não a seleção do mapa redirecionando pra pagina de criar evento
         criarEventoFlag = false;
 
         // Loading products in Background Thread
         new LoadAllEvents().execute();
 
-        btnCriarEvento.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //Intent actionCriarEvento = new Intent(TelaMapaEventos.this, TelaCriarEvento.class);
-                //TelaMapaEventos.this.startActivity(actionCriarEvento);
-                if (criarEventoFlag) {
-                    criarEventoFlag = false;
-                    btnCriarEvento.setBackgroundColor(16711737);
-                } else {
-                    if ((longSelecionada != "") && (latSelecionada != "")) {
-                        Intent actionCriarEvento = new Intent(TelaMapaEventos.this, TelaCriarEvento.class);
-                        actionCriarEvento.putExtra("long", longSelecionada);
-                        actionCriarEvento.putExtra("lat", latSelecionada);
-                        actionCriarEvento.putExtra("cidade", cidade);
-                        actionCriarEvento.putExtra("endereco", endereco);
-                        //Optional parameters
-                        TelaMapaEventos.this.startActivity(actionCriarEvento);
+        SharedPreferences sharedPref = getSharedPreferences("userInfo", MODE_PRIVATE);
+        prefId = sharedPref.getString("usuario_id", "");
+
+        //Ativar botão CriarEvento e MeusEventos caso exista usuario logado
+        if (prefId != "") {
+            Button btnCriarEvento = (Button)findViewById(R.id.btn_criar_evento);
+            btnCriarEvento.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    //Intent actionCriarEvento = new Intent(TelaMapaEventos.this, TelaCriarEvento.class);
+                    //TelaMapaEventos.this.startActivity(actionCriarEvento);
+                    if (criarEventoFlag) {
+                        criarEventoFlag = false;
                     } else {
-                        Toast.makeText(getApplicationContext(), "Selecione no mapa o local de seu evento!", Toast.LENGTH_LONG).show();
-                        //btnCriarEvento.setBackgroundColor(6029333);
-                        btnCriarEvento.getBackground().setColorFilter(6029333, PorterDuff.Mode.MULTIPLY);
-                        criarEventoFlag = true;
+                        if ((longSelecionada != "") && (latSelecionada != "")) {
+                            Intent actionCriarEvento = new Intent(TelaMapaEventos.this, TelaCriarEvento.class);
+                            actionCriarEvento.putExtra("long", longSelecionada);
+                            actionCriarEvento.putExtra("lat", latSelecionada);
+                            actionCriarEvento.putExtra("cidade", cidade);
+                            actionCriarEvento.putExtra("endereco", endereco);
+                            //Optional parameters
+                            TelaMapaEventos.this.startActivity(actionCriarEvento);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Selecione no mapa o local de seu evento!", Toast.LENGTH_LONG).show();
+                            criarEventoFlag = true;
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        Button btn2 = (Button)findViewById(R.id.btn_meus_eventos);
+            Button btnMeusEventos = (Button)findViewById(R.id.btn_meus_eventos);
+            btnMeusEventos.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent actionMeusEventos = new Intent(TelaMapaEventos.this, TelaMenuInicial.class);
+                    //myIntent.putExtra("key", value); //Optional parameters
+                    TelaMapaEventos.this.startActivity(actionMeusEventos);
+                }
+            });
 
-        btn2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent actionMeusEventos = new Intent(TelaMapaEventos.this, TelaMenuInicial.class);
-                //myIntent.putExtra("key", value); //Optional parameters
-                TelaMapaEventos.this.startActivity(actionMeusEventos);
-            }
-        });
+            LinearLayout layoutBotoes = (LinearLayout) findViewById(R.id.layout_botoes_evento);
+            layoutBotoes.setVisibility(View.VISIBLE);
+        } else {
+            //Caso nao esteja logado, setar botao Login
+
+            Button btnLogin = (Button)findViewById(R.id.btn_login);
+            btnLogin.setVisibility(View.VISIBLE);
+            btnLogin.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent actionLogin = new Intent(TelaMapaEventos.this, TelaMinhaConta.class);
+                    //myIntent.putExtra("key", value); //Optional parameters
+                    TelaMapaEventos.this.startActivity(actionLogin);
+                }
+            });
+        }
 
         this.setUpMap();
 

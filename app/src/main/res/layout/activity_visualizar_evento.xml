@@ -176,7 +176,7 @@
                     android:layout_width="154dp"
                     android:layout_height="wrap_content"
                     android:text="Solicitar Música"
-                    android:id="@+id/button3"
+                    android:id="@+id/btn_pedido"
                     android:layout_gravity="right"
                     android:layout_marginTop="20dp"
                     android:background="#ae0010"

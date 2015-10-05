@@ -1,0 +1,64 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="view.TelaSolicitarMusica">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView android:text="Artista:" android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="19dp"
+            android:id="@+id/textView21"
+            android:layout_marginTop="30dp" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_artista" />
+
+        <TextView
+            android:text="Título da música:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="19dp"
+            android:id="@+id/textView22"
+            android:layout_marginTop="30dp" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_titulo_musica" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="19dp"
+            android:id="@+id/text_info"
+            android:layout_marginTop="30dp" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Solicitar Música"
+            android:id="@+id/btn_solicitar"
+            android:layout_alignBottom="@+id/btn_criar_evento"
+            android:layout_toEndOf="@+id/btn_criar_evento"
+            android:layout_toRightOf="@+id/btn_criar_evento"
+            android:layout_alignParentRight="false"
+            android:textColor="#FFFF"
+            android:background="#ff0039"
+            android:padding="5dp"
+            android:visibility="visible"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="30dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

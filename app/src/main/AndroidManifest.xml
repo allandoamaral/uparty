@@ -57,6 +57,10 @@
             android:name="view.TelaVisualizarEvento"
             android:label="@string/title_activity_tela_visualizar_evento" >
         </activity>
+        <activity
+            android:name="view.TelaSolicitarMusica"
+            android:label="@string/title_activity_solicitar_musica" >
+        </activity>
     </application>
 
 </manifest>

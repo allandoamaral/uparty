@@ -6,89 +6,128 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MenuInicial"
     android:background="#060202">
 
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView"
+        android:padding="5dp">
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="1">
+            android:layout_height="match_parent">
 
-            <EditText
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/local_procurado"
-                android:text="Pesquisar"
-                android:layout_weight="0.97"
-                android:background="#FFFF"
-                android:padding="5dp"
-                android:singleLine="true"
-                android:selectAllOnFocus="true" />
+                android:weightSum="1">
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/local_procurado"
+                    android:text="Pesquisar"
+                    android:layout_weight="0.97"
+                    android:background="#FFFF"
+                    android:padding="5dp"
+                    android:singleLine="true"
+                    android:selectAllOnFocus="true" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ir"
+                    android:id="@+id/btn_procurar_local"
+                    android:nestedScrollingEnabled="false"
+                    android:onClick="geoLocate" />
+
+            </LinearLayout>
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                android:layout_height="400dp" android:id="@+id/map"
+                tools:context="view.TelaMapaEventos"
+                android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/lat_long_text"
+                    android:layout_above="@+id/btn_criar_evento"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="5dp"
+                    android:textColor="#FFFF"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/layout_botoes_evento">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ir"
-                android:id="@+id/btn_procurar_local"
-                android:nestedScrollingEnabled="false"
-                android:onClick="geoLocate" />
-
-        </LinearLayout>
-
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-            android:layout_height="400dp" android:id="@+id/map"
-            tools:context="view.TelaMapaEventos"
-            android:name="com.google.android.gms.maps.SupportMapFragment" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/lat_long_text"
-                android:layout_above="@+id/btn_criar_evento"
+                android:text="Criar Evento"
+                android:id="@+id/btn_criar_evento"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_margin="5dp"
+                android:background="#ff0039"
                 android:textColor="#FFFF"
-                android:textSize="12dp" />
+                android:padding="5dp"
+                android:visibility="visible" />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Meus Eventos"
+                android:id="@+id/btn_meus_eventos"
+                android:layout_alignBottom="@+id/btn_criar_evento"
+                android:layout_toEndOf="@+id/btn_criar_evento"
+                android:layout_toRightOf="@+id/btn_criar_evento"
+                android:layout_alignParentRight="false"
+                android:layout_marginLeft="100dp"
+                android:textColor="#FFFF"
+                android:background="#ff0039"
+                android:padding="5dp"
+                android:visibility="visible" />
         </LinearLayout>
 
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:id="@+id/btn_login"
+            android:layout_alignBottom="@+id/btn_criar_evento"
+            android:layout_toEndOf="@+id/btn_criar_evento"
+            android:layout_toRightOf="@+id/btn_criar_evento"
+            android:layout_alignParentRight="false"
+            android:textColor="#FFFF"
+            android:background="#ff0039"
+            android:padding="5dp"
+            android:visibility="invisible"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Criar Evento"
-        android:id="@+id/btn_criar_evento"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="#ff0039"
-        android:textColor="#FFFF"
-        android:padding="5dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Meus Eventos"
-        android:id="@+id/btn_meus_eventos"
-        android:layout_alignBottom="@+id/btn_criar_evento"
-        android:layout_toEndOf="@+id/btn_criar_evento"
-        android:layout_toRightOf="@+id/btn_criar_evento"
-        android:layout_alignParentRight="false"
-        android:layout_marginLeft="100dp"
-        android:textColor="#FFFF"
-        android:background="#ff0039"
-        android:padding="5dp" />
-
+    </ScrollView>
 </RelativeLayout>

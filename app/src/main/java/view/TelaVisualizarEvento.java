@@ -7,11 +7,14 @@ import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.allandoamaralalves.upartyproject.R;
@@ -52,6 +55,17 @@ public class TelaVisualizarEvento extends AppCompatActivity {
         Intent i = getIntent();
         eventoId = i.getStringExtra(TAG_ID);
         new GetEventDetails().execute();
+
+        Button btnPedido = (Button)findViewById(R.id.btn_pedido);
+
+        btnPedido.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent actionSolicitarMusica = new Intent(TelaVisualizarEvento.this, TelaSolicitarMusica.class);
+                //setar valor eventoId para a proxima tela
+                actionSolicitarMusica.putExtra(TAG_ID, eventoId);
+                TelaVisualizarEvento.this.startActivity(actionSolicitarMusica);
+            }
+        });
     }
 
     @Override
