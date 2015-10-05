@@ -1,4 +1,4 @@
-package com.example.allandoamaralalves.upartyproject;
+package view;
 
 
 import org.apache.http.NameValuePair;
@@ -33,6 +33,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.allandoamaralalves.upartyproject.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,6 +48,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import model.JSONParser;
 
 
 public class TelaMapaEventos extends FragmentActivity {

@@ -1,24 +1,24 @@
-package com.example.allandoamaralalves.upartyproject;
-
-import java.util.ArrayList;
-import java.util.List;
+package view;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.EditText;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.example.allandoamaralalves.upartyproject.R;
+
+import controller.EventoDAO;
+import model.Evento;
+import model.JSONParser;
 
 public class TelaVisualizarEvento extends AppCompatActivity {
 
@@ -94,9 +94,6 @@ public class TelaVisualizarEvento extends AppCompatActivity {
             pDialog.show();
         }
 
-        /**
-         * Getting product details in background thread
-         * */
         protected String doInBackground(String... args) {
             EventoDAO dao = new EventoDAO();
             eventoObj = dao.buscarEvento(Integer.parseInt(eventoId));
@@ -107,9 +104,8 @@ public class TelaVisualizarEvento extends AppCompatActivity {
          * After completing background task Dismiss the progress dialog
          * **/
         protected void onPostExecute(String file_url) {
-            // dismiss the dialog once got all details
+            // dismiss the dialog
             pDialog.dismiss();
-            // product with this pid found
             // Edit Text
             txtTitulo = (TextView) findViewById(R.id.txt_titulo);
             txtDescricao = (TextView) findViewById(R.id.txt_descricao);

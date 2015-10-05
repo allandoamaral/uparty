@@ -1,4 +1,4 @@
-package com.example.allandoamaralalves.upartyproject;
+package view;
 
 
 import android.app.DatePickerDialog;
@@ -12,19 +12,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -32,6 +27,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TimePicker;
+
+import com.example.allandoamaralalves.upartyproject.R;
+
+import controller.EventoDAO;
+import model.Evento;
 
 public class TelaCriarEvento extends AppCompatActivity {
     // Progress Dialog
@@ -145,6 +145,8 @@ public class TelaCriarEvento extends AppCompatActivity {
             // dismiss the dialog once product uupdated
             if(result.equalsIgnoreCase("1")){
                 Toast.makeText(getApplicationContext(), "Novo evento salvo...", Toast.LENGTH_LONG).show();
+                Intent actionMapa = new Intent(TelaCriarEvento.this, TelaMapaEventos.class);
+                TelaCriarEvento.this.startActivity(actionMapa);
             } else {
                 Toast.makeText(getApplicationContext(), "Erro no cadastro!", Toast.LENGTH_LONG).show();
             }

@@ -1,4 +1,4 @@
-package com.example.allandoamaralalves.upartyproject;
+package model;
 
 import java.io.BufferedReader;
 import java.io.IOException;

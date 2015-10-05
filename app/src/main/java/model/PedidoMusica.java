@@ -1,4 +1,4 @@
-package com.example.allandoamaralalves.upartyproject;
+package model;
 
 /**
  * Created by allandoamaralalves on 03/10/15.

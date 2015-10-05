@@ -1,8 +1,9 @@
-package com.example.allandoamaralalves.upartyproject;
+package controller;
 
-import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
+
+import model.Evento;
+import model.JSONParser;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -10,10 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 

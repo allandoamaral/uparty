@@ -1,4 +1,4 @@
-package com.example.allandoamaralalves.upartyproject;
+package model;
 
 import java.util.Date;
 
@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by allandoamaralalves on 18/09/15.
  */
 public class Usuario {
-    private int id;
+    private int id = 0;
     private String nome;
     private Date dataNascimento;
     private String cidade;
