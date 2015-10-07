@@ -2,6 +2,10 @@ package controller;
 
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import model.JSONParser;
 import model.Usuario;
 
@@ -12,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class UsuarioDAO {
@@ -23,12 +28,14 @@ public class UsuarioDAO {
     // url para inserir novo usuario no banco do servidor online
     private static String url_insert_new = "http://uparty.3eeweb.com/db_inserir_usuario.php";
     private static String url_login_user = "http://uparty.3eeweb.com/db_login_usuario.php";
+    private static String url_get_users_by_name = "http://uparty.3eeweb.com/db_get_user_by_name.php";
 
     //Tags
     // JSON Node names
     private int success = 0;
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_USUARIO = "usuario";
+    private static final String TAG_USUARIOS = "usuarios";
 
     //Tags para os campos da tabela Usuarios no bando de dados
     private static final String TAG_ID = "usuario_id";
@@ -93,5 +100,36 @@ public class UsuarioDAO {
             e.printStackTrace();
         }
         return usuarioObj;
+    }
+
+    public HashMap<Integer, List<String>> pesquisarUsuario (String nome) {
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("nome_pesquisa", nome));
+        // getting JSON string from URL
+        json = jsonParser.makeHttpRequest(url_get_users_by_name, "GET", params);
+
+        HashMap<Integer, List<String>> listaUsuarios = new HashMap<>();
+        Log.d("Usuario: ", json.toString());
+
+        try {
+            // Checking for SUCCESS TAG
+            int success = json.getInt(TAG_SUCCESS);
+            if (success == 1) {
+                // retornando json array de eventos
+                usuarioJson = json.getJSONArray(TAG_USUARIOS);
+                for (int i = 0; i < usuarioJson.length(); i++) {
+                    JSONObject c = null;
+                    c = usuarioJson.getJSONObject(i);
+                    List<String> tempList = new ArrayList<>();
+                    tempList.add(c.getString(TAG_ID));
+                    tempList.add(c.getString(TAG_NOME) + " (" + c.getString(TAG_USER) + ")");
+                    listaUsuarios.put(i, tempList);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return listaUsuarios;
     }
 }

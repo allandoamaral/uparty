@@ -61,6 +61,10 @@
             android:name="view.TelaSolicitarMusica"
             android:label="@string/title_activity_solicitar_musica" >
         </activity>
+        <activity
+            android:name="view.TelaSelecionarDjs"
+            android:label="@string/title_activity_selecionar_djs" >
+        </activity>
     </application>
 
 </manifest>

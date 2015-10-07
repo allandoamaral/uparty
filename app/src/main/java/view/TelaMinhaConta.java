@@ -90,6 +90,16 @@ public class TelaMinhaConta extends AppCompatActivity {
             }
         });
 
+        Button btn2 = (Button)findViewById(R.id.button2);
+
+        btn2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent actionDjs = new Intent(TelaMinhaConta.this, TelaSelecionarDjs.class);
+                //myIntent.putExtra("key", value); //Optional parameters
+                TelaMinhaConta.this.startActivity(actionDjs);
+            }
+        });
+
         Button btnOk = (Button)findViewById(R.id.btn_ok);
 
         btnOk.setOnClickListener(new View.OnClickListener() {

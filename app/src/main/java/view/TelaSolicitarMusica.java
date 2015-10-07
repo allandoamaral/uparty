@@ -9,9 +9,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.allandoamaralalves.upartyproject.R;
 import com.google.android.gms.maps.model.LatLng;
@@ -22,16 +26,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import controller.EventoDAO;
+import controller.PedidoMusicaDAO;
+import model.Evento;
 import model.JSONParser;
+import model.PedidoMusica;
 
 public class TelaSolicitarMusica extends AppCompatActivity {
 
-    private String eventoId, usuarioId;
     private ProgressDialog pDialog;
 
     private static final String TAG_EVENTO_ID = "evento_id";
@@ -44,7 +56,14 @@ public class TelaSolicitarMusica extends AppCompatActivity {
     // djs JSONArray
     private JSONArray djs = null;
 
+    //Lista de opcoes para o combobox de selecao do dj da festa
     private final List<String> listDjs = new ArrayList<String>();
+    //Lista de ids dos usuarios djs referentes aos nomes da lista 'listDjs'
+    private final List<String> listDjsIds = new ArrayList<String>();
+
+    private PedidoMusica pedidoObj = new PedidoMusica();
+    private String eventoId, usuarioId, djId;
+    private EditText txt_musica, txt_artista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +77,33 @@ public class TelaSolicitarMusica extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences("userInfo", MODE_PRIVATE);
         usuarioId = sharedPref.getString("usuario_id", "");
 
+        // Campos de texto do formulario
+        txt_musica = (EditText)findViewById(R.id.txt_titulo_musica);
+        txt_artista = (EditText)findViewById(R.id.txt_artista);
+
         TextView txtInfo = (TextView) findViewById(R.id.text_info);
         txtInfo.setText("Info: ID " + usuarioId + " / Evento " + eventoId);
 
         new LoadDjs().execute();
+
+        Button btnSolicitar = (Button)findViewById(R.id.btn_solicitar);
+        btnSolicitar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //retornando numero do item da lista de nomes de djs para
+                // buscar o id correspondente a ele na outra lista
+                Spinner djSpinner=(Spinner) findViewById(R.id.spinner_dj);
+                Integer itemPosition = djSpinner.getSelectedItemPosition();
+                djId = listDjsIds.get(itemPosition);
+                pedidoObj.setDjId(Integer.parseInt(djId));
+                pedidoObj.setEventoId(Integer.parseInt(eventoId));
+                pedidoObj.setUsuarioId(Integer.parseInt(usuarioId));
+                pedidoObj.setArtista(txt_artista.getText().toString());
+                pedidoObj.setMusica(txt_musica.getText().toString());
+
+                InsertNewPedido thread = new InsertNewPedido();
+                thread.execute();
+            }
+        });
     }
 
     @Override
@@ -130,8 +172,8 @@ public class TelaSolicitarMusica extends AppCompatActivity {
                     JSONObject c = null;
                     try {
                         c = djs.getJSONObject(i);
-                        listDjs.add(c.getString("usuariodj_id"));
-                        System.out.println("LALA DJ - " + c.getString("usuariodj_id"));
+                        listDjsIds.add(c.getString("usuariodj_id"));
+                        listDjs.add(c.getString("usuario_nome") + " (" + c.getString("usuario_username") + ")");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -143,6 +185,43 @@ public class TelaSolicitarMusica extends AppCompatActivity {
                 adp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 sp.setAdapter(adp);
             }
+        }
+    }
+
+    class InsertNewPedido extends AsyncTask<String, String, String> {
+        /**
+         * Before starting background thread Show Progress Dialog *
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(TelaSolicitarMusica.this);
+            pDialog.setMessage("Cadastrando novo pedido...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        protected String doInBackground(String... args) {
+            PedidoMusicaDAO dao = new PedidoMusicaDAO();
+            String resultado = dao.inserirEvento(pedidoObj);
+            return resultado;
+        }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         **/
+        protected void onPostExecute(String result) {
+            // dismiss the dialog once product uupdated
+            if(result.equalsIgnoreCase("1")){
+                Toast.makeText(getApplicationContext(), "Novo pedido salvo...", Toast.LENGTH_LONG).show();
+                Intent actionLogin = new Intent(TelaSolicitarMusica.this, TelaMapaEventos.class);
+                TelaSolicitarMusica.this.startActivity(actionLogin);
+            } else {
+                Toast.makeText(getApplicationContext(), "Erro no cadastro!", Toast.LENGTH_LONG).show();
+            }
+            pDialog.dismiss();
+            finish();
         }
     }
 }

@@ -15,4 +15,5 @@
     <string name="title_activity_criar_usuario">Cadastrar Usuario</string>
     <string name="title_activity_tela_visualizar_evento">TelaVisualizarEvento</string>
     <string name="title_activity_solicitar_musica">Solicitar Música</string>
+    <string name="title_activity_selecionar_djs">Selecionar Djs</string>
 </resources>

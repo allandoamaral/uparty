@@ -1,11 +1,14 @@
 package model;
 
+import java.util.Date;
+
 /**
  * Created by allandoamaralalves on 03/10/15.
  */
 public class PedidoMusica {
     private String artista, musica;
     private int usuarioId, djId, eventoId;
+    private Date data_hora;
 
     public String getArtista() {
         return artista;
@@ -45,5 +48,13 @@ public class PedidoMusica {
 
     public void setEventoId(int eventoId) {
         this.eventoId = eventoId;
+    }
+
+    public Date getData_hora() {
+        return data_hora;
+    }
+
+    public void setData_hora(Date data_hora) {
+        this.data_hora = data_hora;
     }
 }
