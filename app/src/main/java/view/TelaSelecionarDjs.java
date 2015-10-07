@@ -1,6 +1,7 @@
 package view;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,9 +9,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,11 +22,13 @@ import com.example.allandoamaralalves.upartyproject.R;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import controller.EventoDAO;
 import controller.UsuarioDAO;
+import model.Evento;
 import view.TelaVisualizarEvento;
 
 public class TelaSelecionarDjs extends AppCompatActivity {
@@ -33,15 +38,22 @@ public class TelaSelecionarDjs extends AppCompatActivity {
     // Progress Dialog
     private ProgressDialog pDialog;
 
+    private static final String TAG_EVENTO_ID = "evento_id";
+
     private String nomePesquisado = "";
-    private HashMap<Integer, List<String>> listaUsuarios;
+    private HashMap<Integer, List<String>> listaUsuarios = new HashMap<>();
     private List<String> listaUsuariosAdicionados = new ArrayList<>();
     private HashMap<String, String> infoUsuariosAdicionados = new HashMap<>();
+    private String eventoId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selecionar_djs);
+
+        // buscando o parametro evento_id enviado pela tela anterior
+        Intent i = getIntent();
+        eventoId = i.getStringExtra(TAG_EVENTO_ID);
 
         txt_nome_usuario = (EditText) findViewById(R.id.txt_nome_usuario);
 
@@ -53,6 +65,16 @@ public class TelaSelecionarDjs extends AppCompatActivity {
                 thread.execute();
             }
         });
+
+        Button btnInserir = (Button)findViewById(R.id.btn_definir_djs);
+        btnInserir.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                InsertDjs thread = new InsertDjs();
+                thread.execute();
+            }
+        });
+
+        new LoadDjs().execute();
     }
 
     @Override
@@ -81,7 +103,6 @@ public class TelaSelecionarDjs extends AppCompatActivity {
         // Layout geral
         LinearLayout lm = (LinearLayout)findViewById(R.id.layout_result);
         ((LinearLayout) lm).removeAllViews();
-
         //percorrer lista de usuarios retornados da busca e exibir na tela
         for (int i = 0; i < listaUsuarios.size(); i++) {
             //variaveis para id e nome do usuario percorrido
@@ -107,9 +128,6 @@ public class TelaSelecionarDjs extends AppCompatActivity {
                     public void onClick(View v) {
                         listaUsuariosAdicionados.add(idUser);
                         infoUsuariosAdicionados.put(idUser, nomeUser);
-                        Toast.makeText(getApplicationContext(),
-                                "Dj " + idUser + " added!",
-                                Toast.LENGTH_LONG).show();
                         listaUsuariosAdicionados.toString();
                         TelaSelecionarDjs.this.setSelectedUsers();
                         TelaSelecionarDjs.this.setResultSearch();
@@ -152,9 +170,6 @@ public class TelaSelecionarDjs extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     listaUsuariosAdicionados.remove(index);
-                    Toast.makeText(getApplicationContext(),
-                            "Dj " + index + " removido!",
-                            Toast.LENGTH_LONG).show();
                     TelaSelecionarDjs.this.setResultSearch();
                     TelaSelecionarDjs.this.setSelectedUsers();
                 }
@@ -170,9 +185,7 @@ public class TelaSelecionarDjs extends AppCompatActivity {
 
     class GetUsersByName extends AsyncTask<String, String, String> {
         private JSONObject json;
-        /**
-         * Before starting background thread Show Progress Dialog
-         * */
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -189,13 +202,71 @@ public class TelaSelecionarDjs extends AppCompatActivity {
             return null;
         }
 
-        /**
-         * After completing background task Dismiss the progress dialog
-         * **/
         protected void onPostExecute(String file_url) {
             // dismiss the dialog
             pDialog.dismiss();
             TelaSelecionarDjs.this.setResultSearch();
+        }
+    }
+
+    class LoadDjs extends AsyncTask<String, String, String> {
+        private JSONObject json;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(TelaSelecionarDjs.this);
+            pDialog.setMessage("Loading djs. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        protected String doInBackground(String... args) {
+            UsuarioDAO dao = new UsuarioDAO();
+            HashMap<Integer, List<String>> djsEventoResult = dao.getDjsEvento(eventoId);
+            if (djsEventoResult != null) {
+                for (int i = 0; i < djsEventoResult.size(); i++) {
+                    listaUsuariosAdicionados.add(djsEventoResult.get(i).get(0));
+                    infoUsuariosAdicionados.put(djsEventoResult.get(i).get(0), djsEventoResult.get(i).get(1));
+                }
+            }
+            return null;
+        }
+
+        protected void onPostExecute(String file_url) {
+            pDialog.dismiss();
+            TelaSelecionarDjs.this.setSelectedUsers();
+        }
+    }
+
+    class InsertDjs extends AsyncTask<String, String, String> {
+        /**
+         * Before starting background thread Show Progress Dialog *
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(TelaSelecionarDjs.this);
+            pDialog.setMessage("Atualizando evento...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        protected String doInBackground(String... args) {
+            UsuarioDAO dao = new UsuarioDAO();
+            for (int i = 0; i < listaUsuariosAdicionados.size(); i++) {
+                dao.inserirDjEmEvento(listaUsuariosAdicionados.get(i), eventoId);
+            }
+            return null;
+        }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         **/
+        protected void onPostExecute(String result) {
+            pDialog.dismiss();
+            finish();
         }
     }
 }

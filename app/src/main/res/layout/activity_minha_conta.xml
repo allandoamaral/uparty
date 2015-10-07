@@ -141,14 +141,6 @@
             android:id="@+id/btn_logout"
             android:layout_marginTop="50dp" />
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="DJS"
-            android:id="@+id/button2"
-            android:layout_marginTop="50dp"
-            android:visibility="visible" />
-
     </LinearLayout>
 
 </RelativeLayout>

@@ -66,6 +66,17 @@ public class TelaVisualizarEvento extends AppCompatActivity {
                 TelaVisualizarEvento.this.startActivity(actionSolicitarMusica);
             }
         });
+
+        Button btnDjs = (Button)findViewById(R.id.btn_gerenciar_djs);
+
+        btnDjs.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent actionDjs = new Intent(TelaVisualizarEvento.this, TelaSelecionarDjs.class);
+                //setar valor eventoId para a proxima tela
+                actionDjs.putExtra(TAG_ID, eventoId);
+                TelaVisualizarEvento.this.startActivity(actionDjs);
+            }
+        });
     }
 
     @Override

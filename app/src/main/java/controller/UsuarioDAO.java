@@ -27,8 +27,10 @@ public class UsuarioDAO {
 
     // url para inserir novo usuario no banco do servidor online
     private static String url_insert_new = "http://uparty.3eeweb.com/db_inserir_usuario.php";
+    private static String url_insert_dj_event = "http://uparty.3eeweb.com/db_inserir_dj_evento.php";
     private static String url_login_user = "http://uparty.3eeweb.com/db_login_usuario.php";
     private static String url_get_users_by_name = "http://uparty.3eeweb.com/db_get_user_by_name.php";
+    private static String url_get_djs_by_event = "http://uparty.3eeweb.com/db_retornar_djs.php";
 
     //Tags
     // JSON Node names
@@ -36,9 +38,11 @@ public class UsuarioDAO {
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_USUARIO = "usuario";
     private static final String TAG_USUARIOS = "usuarios";
+    private static final String TAG_DJS = "djs";
 
     //Tags para os campos da tabela Usuarios no bando de dados
     private static final String TAG_ID = "usuario_id";
+    private static final String TAG_DJ_ID = "usuariodj_id";
     private static final String TAG_NOME = "usuario_nome";
     private static final String TAG_NASC = "usuario_nascimento";
     private static final String TAG_CIDADE = "usuario_cidade";
@@ -46,6 +50,7 @@ public class UsuarioDAO {
     private static final String TAG_EMAIL = "usuario_email";
     private static final String TAG_USER = "usuario_username";
     private static final String TAG_SENHA = "usuario_senha";
+    private static final String TAG_EVENTO_ID = "evento_id";
 
     public int inserirUsuario (Usuario usuario) {
         // Building Parameters
@@ -131,5 +136,58 @@ public class UsuarioDAO {
             e.printStackTrace();
         }
         return listaUsuarios;
+    }
+
+    public HashMap<Integer, List<String>> getDjsEvento(String eventoId) {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair(TAG_EVENTO_ID, eventoId));
+        // getting JSON string from URL
+        json = jsonParser.makeHttpRequest(url_get_djs_by_event, "GET", params);
+
+        HashMap<Integer, List<String>> listaDjs = new HashMap<>();
+        Log.d("Lala Djs: ", json.toString());
+
+        try {
+            // Checking for SUCCESS TAG
+            int success = json.getInt(TAG_SUCCESS);
+            if (success == 1) {
+                // retornando json array de eventos
+                usuarioJson = json.getJSONArray(TAG_DJS);
+                for (int i = 0; i < usuarioJson.length(); i++) {
+                    JSONObject c = null;
+                    c = usuarioJson.getJSONObject(i);
+                    List<String> tempList = new ArrayList<>();
+                    tempList.add(c.getString(TAG_DJ_ID));
+                    tempList.add(c.getString(TAG_NOME) + " (" + c.getString(TAG_USER) + ")");
+                    listaDjs.put(i, tempList);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return listaDjs;
+    }
+
+    public int inserirDjEmEvento (String usuarioId, String eventoId) {
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair(TAG_ID, usuarioId));
+        params.add(new BasicNameValuePair(TAG_EVENTO_ID, eventoId));
+
+        // sending modified data through http request
+        // Notice that update product url accepts POST met8hod
+        json = jsonParser.makeHttpRequest(url_insert_dj_event,
+                "GET", params);
+
+        // check log cat fro response
+        Log.d("Create Response", json.toString());
+
+        // check json success tag
+        try {
+            success = json.getInt(TAG_SUCCESS);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return success;
     }
 }

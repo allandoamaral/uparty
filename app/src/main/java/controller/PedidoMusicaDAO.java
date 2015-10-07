@@ -41,7 +41,7 @@ public class PedidoMusicaDAO {
     private JSONArray pedidoJson = null;
     private PedidoMusica pedidoObj;
 
-    public String inserirEvento(PedidoMusica pedido) {
+    public String inserirPedido(PedidoMusica pedido) {
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair(TAG_ARTISTA, pedido.getArtista()));

@@ -38,6 +38,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import controller.EventoDAO;
 import controller.PedidoMusicaDAO;
+import controller.UsuarioDAO;
 import model.Evento;
 import model.JSONParser;
 import model.PedidoMusica;
@@ -49,12 +50,12 @@ public class TelaSolicitarMusica extends AppCompatActivity {
     private static final String TAG_EVENTO_ID = "evento_id";
     JSONParser jsonParser = new JSONParser();
 
-    private static String url_get_djs = "http://uparty.3eeweb.com/db_retornar_djs.php";
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_DJS = "djs";
     // djs JSONArray
     private JSONArray djs = null;
+    protected HashMap<Integer, List<String>> djsEventoResult = new HashMap<>();
 
     //Lista de opcoes para o combobox de selecao do dj da festa
     private final List<String> listDjs = new ArrayList<String>();
@@ -141,42 +142,18 @@ public class TelaSolicitarMusica extends AppCompatActivity {
         }
 
         protected String doInBackground(String... args) {
-            // Building Parameters
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair(TAG_EVENTO_ID, eventoId));
-            // getting JSON string from URL
-            json = jsonParser.makeHttpRequest(url_get_djs, "GET", params);
-
-            // Check your log cat for JSON reponse
-            Log.d("All Djs: ", json.toString());
-
-            try {
-                // Checking for SUCCESS TAG
-                int success = json.getInt(TAG_SUCCESS);
-
-                if (success == 1) {
-                    // retornando json array de eventos
-                    djs = json.getJSONArray(TAG_DJS);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            UsuarioDAO dao = new UsuarioDAO();
+            djsEventoResult = dao.getDjsEvento(eventoId);
             return null;
         }
 
         protected void onPostExecute(String file_url) {
             pDialog.dismiss();
             // percorrendo todos os eventos
-            if (djs != null) {
-                for (int i = 0; i < djs.length(); i++) {
-                    JSONObject c = null;
-                    try {
-                        c = djs.getJSONObject(i);
-                        listDjsIds.add(c.getString("usuariodj_id"));
-                        listDjs.add(c.getString("usuario_nome") + " (" + c.getString("usuario_username") + ")");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+            if (djsEventoResult != null) {
+                for (int i = 0; i < djsEventoResult.size(); i++) {
+                    listDjsIds.add(djsEventoResult.get(i).get(0));
+                    listDjs.add(djsEventoResult.get(i).get(1));
                 }
                 Spinner sp=(Spinner) findViewById(R.id.spinner_dj);
                 ArrayAdapter<String> adapter;
@@ -204,7 +181,7 @@ public class TelaSolicitarMusica extends AppCompatActivity {
 
         protected String doInBackground(String... args) {
             PedidoMusicaDAO dao = new PedidoMusicaDAO();
-            String resultado = dao.inserirEvento(pedidoObj);
+            String resultado = dao.inserirPedido(pedidoObj);
             return resultado;
         }
 

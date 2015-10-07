@@ -164,13 +164,14 @@
                 <Button
                     android:layout_width="116dp"
                     android:layout_height="wrap_content"
-                    android:text="Participar"
-                    android:id="@+id/button"
+                    android:text="Gerenciar DJ&apos;s"
+                    android:id="@+id/btn_gerenciar_djs"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="20dp"
                     android:background="#ae0010"
                     android:textColor="#ffffff"
-                    android:layout_marginRight="10dp" />
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.81" />
 
                 <Button
                     android:layout_width="154dp"
