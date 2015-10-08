@@ -82,8 +82,8 @@ public class TelaSolicitarMusica extends AppCompatActivity {
         txt_musica = (EditText)findViewById(R.id.txt_titulo_musica);
         txt_artista = (EditText)findViewById(R.id.txt_artista);
 
-        TextView txtInfo = (TextView) findViewById(R.id.text_info);
-        txtInfo.setText("Info: ID " + usuarioId + " / Evento " + eventoId);
+        //TextView txtInfo = (TextView) findViewById(R.id.text_info);
+        //txtInfo.setText("Info: ID " + usuarioId + " / Evento " + eventoId);
 
         new LoadDjs().execute();
 

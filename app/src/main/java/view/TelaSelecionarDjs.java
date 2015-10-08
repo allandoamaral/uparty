@@ -255,6 +255,7 @@ public class TelaSelecionarDjs extends AppCompatActivity {
 
         protected String doInBackground(String... args) {
             UsuarioDAO dao = new UsuarioDAO();
+            dao.removerDjsEvento(eventoId);
             for (int i = 0; i < listaUsuariosAdicionados.size(); i++) {
                 dao.inserirDjEmEvento(listaUsuariosAdicionados.get(i), eventoId);
             }

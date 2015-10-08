@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EventoDAO {
@@ -21,11 +22,13 @@ public class EventoDAO {
     // url para inserir novo evento no banco
     private static String url_insert_new = "http://uparty.3eeweb.com/db_inserir_evento.php";
     private static String url_event_details = "http://uparty.3eeweb.com/db_retornar_evento.php";
+    private static String url_get_events_by_dj = "http://uparty.3eeweb.com/db_retornar_eventos_dj.php";
 
     // JSON tags
     private String success = "0";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_EVENT = "evento";
+    private static final String TAG_EVENTOS = "eventos";
 
     //Tags para os campos da tabela Eventos no bando de dados
     private static final String TAG_ID = "evento_id";
@@ -36,6 +39,7 @@ public class EventoDAO {
     private static final String TAG_DATA = "evento_data_hora";
     private static final String TAG_LNG = "evento_longitude";
     private static final String TAG_LAT = "evento_latitude";
+    private static final String TAG_USER_ID = "usuario_id";
 
     private JSONArray eventoJson = null;
     private Evento eventoObj;
@@ -102,5 +106,35 @@ public class EventoDAO {
             e.printStackTrace();
         }
         return eventoObj;
+    }
+
+    public HashMap<Integer, List<String>> getEventosDj(String usuarioId) {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair(TAG_USER_ID, usuarioId));
+        // getting JSON string from URL
+        json = jsonParser.makeHttpRequest(url_get_events_by_dj, "GET", params);
+
+        HashMap<Integer, List<String>> listaEventos = new HashMap<>();
+        Log.d("Lala Djs: ", json.toString());
+
+        try {
+            // Checking for SUCCESS TAG
+            int success = json.getInt(TAG_SUCCESS);
+            if (success == 1) {
+                // retornando json array de eventos
+                eventoJson = json.getJSONArray(TAG_EVENTOS);
+                for (int i = 0; i < eventoJson.length(); i++) {
+                    JSONObject c = null;
+                    c = eventoJson.getJSONObject(i);
+                    List<String> tempList = new ArrayList<>();
+                    tempList.add(c.getString(TAG_ID));
+                    tempList.add(c.getString(TAG_TITULO));
+                    listaEventos.put(i, tempList);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return listaEventos;
     }
 }

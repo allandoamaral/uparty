@@ -37,13 +37,13 @@ public class TelaMenuInicial extends AppCompatActivity {
             }
         });
 
-        Button btn3 = (Button)findViewById(R.id.btn_main_config);
+        Button btn3 = (Button)findViewById(R.id.btn_meus_eventos);
 
         btn3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent actionUsuario = new Intent(TelaMenuInicial.this, TelaMinhaConta.class);
+                Intent actionEventos = new Intent(TelaMenuInicial.this, TelaMeusEventos.class);
                 //myIntent.putExtra("key", value); //Optional parameters
-                TelaMenuInicial.this.startActivity(actionUsuario);
+                TelaMenuInicial.this.startActivity(actionEventos);
             }
         });
 

@@ -35,6 +35,16 @@
             android:textColor="#ffffff" />
 
         <Button
+            android:layout_width="123dp"
+            android:layout_height="wrap_content"
+            android:text="Meus Eventos"
+            android:id="@+id/btn_meus_eventos"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="#ff0039"
+            android:textColor="#ffffff" />
+
+        <Button
             android:layout_width="115dp"
             android:layout_height="wrap_content"
             android:text="Minha Conta"
@@ -44,14 +54,5 @@
             android:background="#ff0039"
             android:textColor="#ffffff" />
 
-        <Button
-            android:layout_width="123dp"
-            android:layout_height="wrap_content"
-            android:text="Configurações"
-            android:id="@+id/btn_main_config"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:background="#ff0039"
-            android:textColor="#ffffff" />
     </LinearLayout>
 </RelativeLayout>

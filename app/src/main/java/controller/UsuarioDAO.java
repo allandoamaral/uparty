@@ -31,6 +31,7 @@ public class UsuarioDAO {
     private static String url_login_user = "http://uparty.3eeweb.com/db_login_usuario.php";
     private static String url_get_users_by_name = "http://uparty.3eeweb.com/db_get_user_by_name.php";
     private static String url_get_djs_by_event = "http://uparty.3eeweb.com/db_retornar_djs.php";
+    private static String url_remove_djs_event = "http://uparty.3eeweb.com/db_remover_djs_evento.php";
 
     //Tags
     // JSON Node names
@@ -189,5 +190,23 @@ public class UsuarioDAO {
             e.printStackTrace();
         }
         return success;
+    }
+
+    public int removerDjsEvento (String eventoId) {
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair(TAG_EVENTO_ID, eventoId));
+        // getting JSON string from URL
+        json = jsonParser.makeHttpRequest(url_remove_djs_event, "GET", params);
+        try {
+            // Checking for SUCCESS TAG
+            int success = json.getInt(TAG_SUCCESS);
+            if (success == 1) {
+                return 1;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

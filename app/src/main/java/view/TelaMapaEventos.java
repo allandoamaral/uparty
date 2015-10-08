@@ -114,7 +114,7 @@ public class TelaMapaEventos extends FragmentActivity {
         SharedPreferences sharedPref = getSharedPreferences("userInfo", MODE_PRIVATE);
         prefId = sharedPref.getString("usuario_id", "");
 
-        //Ativar botão CriarEvento e MeusEventos caso exista usuario logado
+        //Ativar botão CriarEvento e TelaMeusEventos caso exista usuario logado
         if (prefId != "") {
             Button btnCriarEvento = (Button)findViewById(R.id.btn_criar_evento);
             btnCriarEvento.setOnClickListener(new View.OnClickListener() {

@@ -46,6 +46,7 @@ public class TelaMinhaConta extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_minha_conta);
 
+
         SharedPreferences sharedPref = getSharedPreferences("userInfo", MODE_PRIVATE);
         prefNome = sharedPref.getString("usuario_nome", "");
         prefId = sharedPref.getString("usuario_id", "");
@@ -87,16 +88,6 @@ public class TelaMinhaConta extends AppCompatActivity {
                 Intent actionCriar = new Intent(TelaMinhaConta.this, TelaCriarUsuario.class);
                 //myIntent.putExtra("key", value); //Optional parameters
                 TelaMinhaConta.this.startActivity(actionCriar);
-            }
-        });
-
-        Button btn2 = (Button)findViewById(R.id.button2);
-
-        btn2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent actionDjs = new Intent(TelaMinhaConta.this, TelaSelecionarDjs.class);
-                //myIntent.putExtra("key", value); //Optional parameters
-                TelaMinhaConta.this.startActivity(actionDjs);
             }
         });
 
