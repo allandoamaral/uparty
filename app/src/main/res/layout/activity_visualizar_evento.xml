@@ -161,28 +161,47 @@
                 android:weightSum="1"
                 android:layout_marginTop="20dp">
 
-                <Button
-                    android:layout_width="116dp"
-                    android:layout_height="wrap_content"
-                    android:text="Gerenciar DJ&apos;s"
-                    android:id="@+id/btn_gerenciar_djs"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20dp"
-                    android:background="#ae0010"
-                    android:textColor="#ffffff"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="0.81" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <Button
-                    android:layout_width="154dp"
-                    android:layout_height="wrap_content"
-                    android:text="Solicitar Música"
-                    android:id="@+id/btn_pedido"
-                    android:layout_gravity="right"
-                    android:layout_marginTop="20dp"
-                    android:background="#ae0010"
-                    android:textColor="#ffffff"
-                    android:layout_weight="0.38" />
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Gerenciar DJ&apos;s"
+                        android:id="@+id/btn_gerenciar_djs"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:background="#ae0010"
+                        android:textColor="#ffffff"
+                        android:layout_marginRight="10dp"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Participar"
+                        android:id="@+id/btn_participar"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:background="#ae0010"
+                        android:textColor="#ffffff"
+                        android:layout_marginRight="10dp"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Solicitar Música"
+                        android:id="@+id/btn_pedido"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="20dp"
+                        android:background="#ae0010"
+                        android:textColor="#ffffff"
+                        android:layout_weight="0.38"
+                        android:visibility="gone" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

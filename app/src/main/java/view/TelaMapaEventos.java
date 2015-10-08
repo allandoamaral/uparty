@@ -140,6 +140,8 @@ public class TelaMapaEventos extends FragmentActivity {
                 }
             });
 
+            btnCriarEvento.setVisibility(View.VISIBLE);
+
             Button btnMeusEventos = (Button)findViewById(R.id.btn_meus_eventos);
             btnMeusEventos.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -149,8 +151,7 @@ public class TelaMapaEventos extends FragmentActivity {
                 }
             });
 
-            LinearLayout layoutBotoes = (LinearLayout) findViewById(R.id.layout_botoes_evento);
-            layoutBotoes.setVisibility(View.VISIBLE);
+            btnMeusEventos.setVisibility(View.VISIBLE);
         } else {
             //Caso nao esteja logado, setar botao Login
 

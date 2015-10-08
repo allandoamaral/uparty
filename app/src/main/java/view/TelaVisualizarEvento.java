@@ -25,7 +25,10 @@ import model.JSONParser;
 
 public class TelaVisualizarEvento extends AppCompatActivity {
 
-    private String eventoId;
+    //Valores salvos no Shared Preferences (session)
+    private String prefId;
+
+    private String eventoId, criadorId;
     protected TextView txtTitulo, txtDescricao, txtEndereco, txtData, txtHora, txtCidade;
 
     // Progress Dialog
@@ -35,6 +38,7 @@ public class TelaVisualizarEvento extends AppCompatActivity {
     JSONParser jsonParser = new JSONParser();
     private JSONArray evento = null;
     private Evento eventoObj;
+    private boolean participante = false;
 
     private static final String TAG_ID = "evento_id";
     private static final String TAG_SUCCESS = "success";
@@ -56,27 +60,50 @@ public class TelaVisualizarEvento extends AppCompatActivity {
         eventoId = i.getStringExtra(TAG_ID);
         new GetEventDetails().execute();
 
-        Button btnPedido = (Button)findViewById(R.id.btn_pedido);
+        SharedPreferences sharedPref = getSharedPreferences("userInfo", MODE_PRIVATE);
+        prefId = sharedPref.getString("usuario_id", "");
+    }
 
-        btnPedido.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent actionSolicitarMusica = new Intent(TelaVisualizarEvento.this, TelaSolicitarMusica.class);
-                //setar valor eventoId para a proxima tela
-                actionSolicitarMusica.putExtra(TAG_ID, eventoId);
-                TelaVisualizarEvento.this.startActivity(actionSolicitarMusica);
-            }
-        });
+    public void setBotoes() {
 
-        Button btnDjs = (Button)findViewById(R.id.btn_gerenciar_djs);
+        System.out.println("LALA CRIADOR - " + criadorId);
+        //se o usuario acessando a tela for o criador do evento
+        if (prefId == criadorId) {
+            Button btnDjs = (Button)findViewById(R.id.btn_gerenciar_djs);
 
-        btnDjs.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent actionDjs = new Intent(TelaVisualizarEvento.this, TelaSelecionarDjs.class);
-                //setar valor eventoId para a proxima tela
-                actionDjs.putExtra(TAG_ID, eventoId);
-                TelaVisualizarEvento.this.startActivity(actionDjs);
-            }
-        });
+            btnDjs.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent actionDjs = new Intent(TelaVisualizarEvento.this, TelaSelecionarDjs.class);
+                    //setar valor eventoId para a proxima tela
+                    actionDjs.putExtra(TAG_ID, eventoId);
+                    TelaVisualizarEvento.this.startActivity(actionDjs);
+                }
+            });
+
+            btnDjs.setVisibility(View.VISIBLE);
+        } else if (participante) {
+            Button btnPedido = (Button)findViewById(R.id.btn_pedido);
+
+            btnPedido.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent actionSolicitarMusica = new Intent(TelaVisualizarEvento.this, TelaSolicitarMusica.class);
+                    //setar valor eventoId para a proxima tela
+                    actionSolicitarMusica.putExtra(TAG_ID, eventoId);
+                    TelaVisualizarEvento.this.startActivity(actionSolicitarMusica);
+                }
+            });
+
+            btnPedido.setVisibility(View.VISIBLE);
+        } else {
+            Button btnParticipar = (Button)findViewById(R.id.btn_participar);
+
+            btnParticipar.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                }
+            });
+
+            btnParticipar.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -122,6 +149,7 @@ public class TelaVisualizarEvento extends AppCompatActivity {
         protected String doInBackground(String... args) {
             EventoDAO dao = new EventoDAO();
             eventoObj = dao.buscarEvento(Integer.parseInt(eventoId));
+            participante = dao.isParticipante(prefId, eventoId);
             return null;
         }
 
@@ -146,6 +174,11 @@ public class TelaVisualizarEvento extends AppCompatActivity {
             txtData.setText(eventoObj.getDataString().substring(5, 7) + "/" +
                     eventoObj.getDataString().substring(8, 10) + "/" + eventoObj.getDataString().substring(0, 4));
             txtHora.setText(eventoObj.getDataString().substring(10, 16));
+
+
+            criadorId = String.valueOf(eventoObj.getCriador_id());
+            System.out.println("LALA CRIADOR - " + criadorId);
+            TelaVisualizarEvento.this.setBotoes();
         }
     }
 }

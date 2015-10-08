@@ -19,10 +19,12 @@ public class EventoDAO {
     private JSONParser jsonParser = new JSONParser();
     private JSONObject json;
 
-    // url para inserir novo evento no banco
+    // url para as operações de busca e inserção no banco de dados online
     private static String url_insert_new = "http://uparty.3eeweb.com/db_inserir_evento.php";
     private static String url_event_details = "http://uparty.3eeweb.com/db_retornar_evento.php";
     private static String url_get_events_by_dj = "http://uparty.3eeweb.com/db_retornar_eventos_dj.php";
+    private static String url_get_events_created = "http://uparty.3eeweb.com/db_retornar_eventos_criados.php";
+    private static String url_is_participante = "http://uparty.3eeweb.com/db_retornar_participacao.php";
 
     // JSON tags
     private String success = "0";
@@ -39,6 +41,7 @@ public class EventoDAO {
     private static final String TAG_DATA = "evento_data_hora";
     private static final String TAG_LNG = "evento_longitude";
     private static final String TAG_LAT = "evento_latitude";
+    private static final String TAG_CRIADOR = "evento_criador_id";
     private static final String TAG_USER_ID = "usuario_id";
 
     private JSONArray eventoJson = null;
@@ -57,6 +60,7 @@ public class EventoDAO {
                         + ":" + evento.getData_hora().getMinutes()));
         params.add(new BasicNameValuePair(TAG_LNG, String.valueOf(evento.getLongitude())));
         params.add(new BasicNameValuePair(TAG_LAT, String.valueOf(evento.getLatitude())));
+        params.add(new BasicNameValuePair(TAG_CRIADOR, String.valueOf(evento.getCriador_id())));
 
         // sending modified data through http request
         // Notice that update product url accepts POST method
@@ -101,6 +105,7 @@ public class EventoDAO {
                 eventoObj.setDataString(c.getString(TAG_DATA));
                 eventoObj.setLongitude(Double.parseDouble(c.getString(TAG_LNG)));
                 eventoObj.setLatitude(Double.parseDouble(c.getString(TAG_LAT)));
+                eventoObj.setCriador_id(Integer.parseInt(c.getString(TAG_CRIADOR)));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -115,7 +120,7 @@ public class EventoDAO {
         json = jsonParser.makeHttpRequest(url_get_events_by_dj, "GET", params);
 
         HashMap<Integer, List<String>> listaEventos = new HashMap<>();
-        Log.d("Lala Djs: ", json.toString());
+        Log.d("Djs: ", json.toString());
 
         try {
             // Checking for SUCCESS TAG
@@ -136,5 +141,54 @@ public class EventoDAO {
             e.printStackTrace();
         }
         return listaEventos;
+    }
+
+    public HashMap<Integer, List<String>> getEventosCriados(String usuarioId) {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair(TAG_USER_ID, usuarioId));
+        // getting JSON string from URL
+        json = jsonParser.makeHttpRequest(url_get_events_created, "GET", params);
+
+        HashMap<Integer, List<String>> listaEventos = new HashMap<>();
+        Log.d("Djs: ", json.toString());
+
+        try {
+            // Checking for SUCCESS TAG
+            int success = json.getInt(TAG_SUCCESS);
+            if (success == 1) {
+                // retornando json array de eventos
+                eventoJson = json.getJSONArray(TAG_EVENTOS);
+                for (int i = 0; i < eventoJson.length(); i++) {
+                    JSONObject c = null;
+                    c = eventoJson.getJSONObject(i);
+                    List<String> tempList = new ArrayList<>();
+                    tempList.add(c.getString(TAG_ID));
+                    tempList.add(c.getString(TAG_TITULO));
+                    listaEventos.put(i, tempList);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return listaEventos;
+    }
+
+    public Boolean isParticipante (String usuarioId, String eventoId) {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair(TAG_USER_ID, usuarioId));
+        params.add(new BasicNameValuePair(TAG_ID, eventoId));
+        // getting JSON string from URL
+        json = jsonParser.makeHttpRequest(url_is_participante, "GET", params);
+
+        try {
+            // Checking for SUCCESS TAG
+            int success = json.getInt(TAG_SUCCESS);
+            if (success == 1) {
+                return true;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

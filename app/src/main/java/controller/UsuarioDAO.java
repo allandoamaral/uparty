@@ -28,6 +28,7 @@ public class UsuarioDAO {
     // url para inserir novo usuario no banco do servidor online
     private static String url_insert_new = "http://uparty.3eeweb.com/db_inserir_usuario.php";
     private static String url_insert_dj_event = "http://uparty.3eeweb.com/db_inserir_dj_evento.php";
+    private static String url_insert_participante = "http://uparty.3eeweb.com/db_inserir_participante.php";
     private static String url_login_user = "http://uparty.3eeweb.com/db_login_usuario.php";
     private static String url_get_users_by_name = "http://uparty.3eeweb.com/db_get_user_by_name.php";
     private static String url_get_djs_by_event = "http://uparty.3eeweb.com/db_retornar_djs.php";
@@ -178,6 +179,29 @@ public class UsuarioDAO {
         // sending modified data through http request
         // Notice that update product url accepts POST met8hod
         json = jsonParser.makeHttpRequest(url_insert_dj_event,
+                "GET", params);
+
+        // check log cat fro response
+        Log.d("Create Response", json.toString());
+
+        // check json success tag
+        try {
+            success = json.getInt(TAG_SUCCESS);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
+
+    public int inserirParticipanteEmEvento (String usuarioId, String eventoId) {
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair(TAG_ID, usuarioId));
+        params.add(new BasicNameValuePair(TAG_EVENTO_ID, eventoId));
+
+        // sending modified data through http request
+        // Notice that update product url accepts POST met8hod
+        json = jsonParser.makeHttpRequest(url_insert_participante,
                 "GET", params);
 
         // check log cat fro response

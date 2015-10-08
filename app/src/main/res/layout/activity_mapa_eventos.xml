@@ -12,6 +12,8 @@
         android:id="@+id/scrollView"
         android:padding="5dp">
 
+    </ScrollView>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -20,7 +22,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="425dp">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -51,7 +53,7 @@
 
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-                android:layout_height="400dp" android:id="@+id/map"
+                android:layout_height="416dp" android:id="@+id/map"
                 tools:context="view.TelaMapaEventos"
                 android:name="com.google.android.gms.maps.SupportMapFragment" />
 
@@ -78,10 +80,9 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:id="@+id/layout_botoes_evento">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
 
             <Button
                 android:layout_width="wrap_content"
@@ -94,7 +95,7 @@
                 android:background="#ff0039"
                 android:textColor="#FFFF"
                 android:padding="5dp"
-                android:visibility="visible" />
+                android:visibility="invisible" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -109,7 +110,7 @@
                 android:textColor="#FFFF"
                 android:background="#ff0039"
                 android:padding="5dp"
-                android:visibility="visible" />
+                android:visibility="invisible" />
         </LinearLayout>
 
         <Button
@@ -128,6 +129,4 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />
     </LinearLayout>
-
-    </ScrollView>
 </RelativeLayout>

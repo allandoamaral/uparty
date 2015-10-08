@@ -4,6 +4,7 @@ package view;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -47,10 +48,17 @@ public class TelaCriarEvento extends AppCompatActivity {
     static final int DATE_DIALOG_ID = 0;
     static final int TIME_DIALOG_ID = 1;
 
+    //Valor salvo do usuario logado no Shared Preferences (session)
+    private String prefId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_criar_evento);
+
+        //Retornando o id do usuario logado no sistema
+        SharedPreferences sharedPref = getSharedPreferences("userInfo", MODE_PRIVATE);
+        prefId = sharedPref.getString("usuario_id", "");
 
         // Campos de texto do formulario
         txtnome = (EditText)findViewById(R.id.txtnome);
@@ -131,6 +139,7 @@ public class TelaCriarEvento extends AppCompatActivity {
             evento.setData_hora(new Date(event_year, event_month, event_day, event_hour, event_minute));
             evento.setLatitude(Double.parseDouble(latitude));
             evento.setLongitude(Double.parseDouble(longitude));
+            evento.setCriador_id(Integer.parseInt(prefId));
 
             EventoDAO dao = new EventoDAO();
 
