@@ -40,7 +40,7 @@ public class PedidoMusicaDAO {
     private static final String TAG_PEDINTE = "pedido_pedinte_id";
     private static final String TAG_HORA = "pedido_horario";
 
-    private static final String TAG_USUARIO_NOME = "usuario_nome";
+    private static final String TAG_USUARIO_NOME = "pedinte_nome";
 
     private JSONArray pedidoJson = null;
     private PedidoMusica pedidoObj;
@@ -73,6 +73,7 @@ public class PedidoMusicaDAO {
     }
 
     public HashMap<Integer, List<String>> getPedidosEvento (String usuarioId, String eventoId) {
+        System.out.println("LALA usuario- " + usuarioId);
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair(TAG_DJ, usuarioId));
         params.add(new BasicNameValuePair(TAG_EVENTO, eventoId));
@@ -80,7 +81,7 @@ public class PedidoMusicaDAO {
         json = jsonParser.makeHttpRequest(url_get_pedidos, "GET", params);
 
         HashMap<Integer, List<String>> listaPedidos = new HashMap<>();
-        Log.d("Pedidos: ", json.toString());
+        Log.d("Pedidos LALA: ", json.toString());
 
         try {
             // Checking for SUCCESS TAG
@@ -94,7 +95,6 @@ public class PedidoMusicaDAO {
                     List<String> tempList = new ArrayList<>();
                     tempList.add(c.getString(TAG_ID));
                     tempList.add(c.getString(TAG_ARTISTA));
-                    tempList.add(c.getString(TAG_MUSICA));
                     tempList.add(c.getString(TAG_MUSICA));
                     tempList.add(c.getString(TAG_HORA));
                     tempList.add(c.getString(TAG_PEDINTE));

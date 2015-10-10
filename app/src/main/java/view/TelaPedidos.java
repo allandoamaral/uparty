@@ -129,6 +129,8 @@ public class TelaPedidos extends AppCompatActivity {
 
         protected void onPostExecute(String file_url) {
             pDialog.dismiss();
+            System.out.println("LALA EVENTO- " + eventoId);
+            System.out.println("LALA LISTA- " + listaPedidosEvento);
             TelaPedidos.this.setResultado();
         }
     }
