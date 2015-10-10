@@ -17,4 +17,5 @@
     <string name="title_activity_solicitar_musica">Solicitar Música</string>
     <string name="title_activity_selecionar_djs">Selecionar Djs</string>
     <string name="title_activity_meus_eventos">Meus Eventos</string>
+    <string name="title_activity_pedidos">Pedidos</string>
 </resources>

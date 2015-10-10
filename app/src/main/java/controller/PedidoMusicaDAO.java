@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import model.Evento;
@@ -23,13 +24,14 @@ public class PedidoMusicaDAO {
 
     // url para inserir novo evento no banco
     private static String url_insert_new = "http://uparty.3eeweb.com/db_inserir_pedido.php";
+    private static String url_get_pedidos = "http://uparty.3eeweb.com/db_retornar_pedidos.php";
 
     // JSON tags
     private String success = "0";
     private static final String TAG_SUCCESS = "success";
-    private static final String TAG_PEDIDO = "pedido";
+    private static final String TAG_PEDIDOS = "pedidos";
 
-    //Tags para os campos da tabela Pedidos no bando de dados
+    //Tags para os campos da tabela TelaPedidos no bando de dados
     private static final String TAG_ID = "pedido_id";
     private static final String TAG_ARTISTA = "pedido_artista";
     private static final String TAG_MUSICA = "pedido_musica";
@@ -37,6 +39,8 @@ public class PedidoMusicaDAO {
     private static final String TAG_EVENTO = "pedido_evento_id";
     private static final String TAG_PEDINTE = "pedido_pedinte_id";
     private static final String TAG_HORA = "pedido_horario";
+
+    private static final String TAG_USUARIO_NOME = "usuario_nome";
 
     private JSONArray pedidoJson = null;
     private PedidoMusica pedidoObj;
@@ -66,5 +70,41 @@ public class PedidoMusicaDAO {
         }
 
         return success;
+    }
+
+    public HashMap<Integer, List<String>> getPedidosEvento (String usuarioId, String eventoId) {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair(TAG_DJ, usuarioId));
+        params.add(new BasicNameValuePair(TAG_EVENTO, eventoId));
+        // getting JSON string from URL
+        json = jsonParser.makeHttpRequest(url_get_pedidos, "GET", params);
+
+        HashMap<Integer, List<String>> listaPedidos = new HashMap<>();
+        Log.d("Pedidos: ", json.toString());
+
+        try {
+            // Checking for SUCCESS TAG
+            int success = json.getInt(TAG_SUCCESS);
+            if (success == 1) {
+                // retornando json array de eventos
+                pedidoJson = json.getJSONArray(TAG_PEDIDOS);
+                for (int i = 0; i < pedidoJson.length(); i++) {
+                    JSONObject c = null;
+                    c = pedidoJson.getJSONObject(i);
+                    List<String> tempList = new ArrayList<>();
+                    tempList.add(c.getString(TAG_ID));
+                    tempList.add(c.getString(TAG_ARTISTA));
+                    tempList.add(c.getString(TAG_MUSICA));
+                    tempList.add(c.getString(TAG_MUSICA));
+                    tempList.add(c.getString(TAG_HORA));
+                    tempList.add(c.getString(TAG_PEDINTE));
+                    tempList.add(c.getString(TAG_USUARIO_NOME));
+                    listaPedidos.put(i, tempList);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return listaPedidos;
     }
 }

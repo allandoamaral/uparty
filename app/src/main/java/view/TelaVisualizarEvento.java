@@ -1,7 +1,5 @@
 package view;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,6 +18,7 @@ import android.widget.TextView;
 import com.example.allandoamaralalves.upartyproject.R;
 
 import controller.EventoDAO;
+import controller.UsuarioDAO;
 import model.Evento;
 import model.JSONParser;
 
@@ -58,17 +57,17 @@ public class TelaVisualizarEvento extends AppCompatActivity {
         // buscando o parametro evento_id enviado pela tela anterior
         Intent i = getIntent();
         eventoId = i.getStringExtra(TAG_ID);
-        new GetEventDetails().execute();
 
         SharedPreferences sharedPref = getSharedPreferences("userInfo", MODE_PRIVATE);
         prefId = sharedPref.getString("usuario_id", "");
+
+        new GetEventDetails().execute();
     }
 
     public void setBotoes() {
-
-        System.out.println("LALA CRIADOR - " + criadorId);
         //se o usuario acessando a tela for o criador do evento
-        if (prefId == criadorId) {
+        if (Integer.parseInt(prefId) == Integer.parseInt(criadorId)) {
+            System.out.println("CRIADOR - " + criadorId + " PREF - " + prefId);
             Button btnDjs = (Button)findViewById(R.id.btn_gerenciar_djs);
 
             btnDjs.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +98,10 @@ public class TelaVisualizarEvento extends AppCompatActivity {
 
             btnParticipar.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    new InsertParticipation().execute();
+                    Intent i = new Intent(TelaVisualizarEvento.this, TelaVisualizarEvento.class);
+                    i.putExtra("evento_id", eventoId);
+                    startActivity(i);
                 }
             });
 
@@ -128,9 +131,7 @@ public class TelaVisualizarEvento extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Background Async Task para retornar informacoes do evento
-     * */
+
     class GetEventDetails extends AsyncTask<String, String, String> {
         private JSONObject json;
         /**
@@ -153,9 +154,6 @@ public class TelaVisualizarEvento extends AppCompatActivity {
             return null;
         }
 
-        /**
-         * After completing background task Dismiss the progress dialog
-         * **/
         protected void onPostExecute(String file_url) {
             // dismiss the dialog
             pDialog.dismiss();
@@ -174,11 +172,31 @@ public class TelaVisualizarEvento extends AppCompatActivity {
             txtData.setText(eventoObj.getDataString().substring(5, 7) + "/" +
                     eventoObj.getDataString().substring(8, 10) + "/" + eventoObj.getDataString().substring(0, 4));
             txtHora.setText(eventoObj.getDataString().substring(10, 16));
-
-
             criadorId = String.valueOf(eventoObj.getCriador_id());
-            System.out.println("LALA CRIADOR - " + criadorId);
             TelaVisualizarEvento.this.setBotoes();
+        }
+    }
+
+    class InsertParticipation extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(TelaVisualizarEvento.this);
+            pDialog.setMessage("Atualizando evento...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        protected String doInBackground(String... args) {
+            UsuarioDAO dao = new UsuarioDAO();
+            dao.inserirParticipanteEmEvento(prefId, eventoId);
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+            pDialog.dismiss();
+            finish();
         }
     }
 }

@@ -122,22 +122,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Localização:"
-            android:id="@+id/textView5"
-            android:layout_margin="5dp" />
-
-        <TextView
-            android:layout_width="308dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/text_latlong"
-            android:layout_margin="5dp"
-            android:textSize="12dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Cidade:"
             android:id="@+id/textView12"
             android:layout_margin="5dp" />
@@ -203,7 +187,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Criar"
+            android:text="Prosseguir"
             android:id="@+id/btn_criar"
             android:layout_marginLeft="150dp"
             android:hyphenationFrequency="none" />

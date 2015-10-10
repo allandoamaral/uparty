@@ -38,6 +38,8 @@ public class TelaMeusEventos extends AppCompatActivity {
     //Valores salvos no Shared Preferences (session)
     private String prefNome, prefId;
 
+    private EventoDAO dao = new EventoDAO();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,14 +163,13 @@ public class TelaMeusEventos extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(TelaMeusEventos.this);
-            pDialog.setMessage("Loading djs. Please wait...");
+            pDialog.setMessage("Carregando eventos cadastrados...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
         }
 
         protected String doInBackground(String... args) {
-            EventoDAO dao = new EventoDAO();
             listaEventosDj = dao.getEventosDj(prefId);
             listaEventosCriados = dao.getEventosCriados(prefId);
             return null;

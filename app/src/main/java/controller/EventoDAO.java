@@ -72,12 +72,14 @@ public class EventoDAO {
 
         // check json success tag
         try {
-            success = json.getString(TAG_SUCCESS);
+            if (json.getString(TAG_SUCCESS) == "1") {
+                return json.getString("created_id");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return success;
+        return "0";
     }
 
     public Evento buscarEvento(int eventoId) {

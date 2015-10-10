@@ -40,7 +40,7 @@ public class TelaCriarEvento extends AppCompatActivity {
 
     //Campos de texto
     private EditText txtnome, txtdescricao, txtcidade, txtendereco;
-    private String latitude, longitude;
+    private String latitude, longitude, idResultado;
 
     Button btn_date, btn_time;
     //Valores da data do evento
@@ -86,10 +86,6 @@ public class TelaCriarEvento extends AppCompatActivity {
         if (addresses.size() > 0)
             System.out.println(addresses.get(0).getLocality());
 
-        //set valor latLong no campo de texto da tela
-        TextView txtlatlong = (TextView)findViewById(R.id.text_latlong);
-        txtlatlong.setText("Longitude: " + longitude + " / Latitude: " + latitude);
-
         final Calendar cal = Calendar.getInstance();
         event_year = cal.get(Calendar.YEAR);
         event_month = cal.get(Calendar.MONTH);
@@ -117,9 +113,6 @@ public class TelaCriarEvento extends AppCompatActivity {
     }
 
     class InsertNewEvent extends AsyncTask<String, String, String> {
-        /**
-         * Before starting background thread Show Progress Dialog *
-         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -143,29 +136,29 @@ public class TelaCriarEvento extends AppCompatActivity {
 
             EventoDAO dao = new EventoDAO();
 
-            String resultado = dao.inserirEvento(evento);
-            return resultado;
+            idResultado = dao.inserirEvento(evento);
+            return idResultado;
         }
 
-        /**
-         * After completing background task Dismiss the progress dialog
-         **/
         protected void onPostExecute(String result) {
+            pDialog.dismiss();
             // dismiss the dialog once product uupdated
-            if(result.equalsIgnoreCase("1")){
+            if(!result.equalsIgnoreCase("0")){
                 Toast.makeText(getApplicationContext(), "Novo evento salvo...", Toast.LENGTH_LONG).show();
                 Intent actionMapa = new Intent(TelaCriarEvento.this, TelaMapaEventos.class);
                 TelaCriarEvento.this.startActivity(actionMapa);
+                System.out.println("LALA" + idResultado);
+                //Após criar evento, ir para tela de seleção de djs
+                Intent actionSelecionarDjs = new Intent(TelaCriarEvento.this, TelaSelecionarDjs.class);
+                actionSelecionarDjs.putExtra("evento_id", idResultado); //Optional parameters
+                TelaCriarEvento.this.startActivity(actionSelecionarDjs);
             } else {
                 Toast.makeText(getApplicationContext(), "Erro no cadastro!", Toast.LENGTH_LONG).show();
             }
-            pDialog.dismiss();
-            finish();
         }
     }
 
     //DatePicker
-
     public void showDialogOnButtonClick() {
         btn_date = (Button) findViewById(R.id.date_picker_button);
 

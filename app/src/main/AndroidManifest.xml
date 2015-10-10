@@ -69,6 +69,10 @@
             android:name="view.TelaMeusEventos"
             android:label="@string/title_activity_meus_eventos" >
         </activity>
+        <activity
+            android:name="view.TelaPedidos"
+            android:label="@string/title_activity_pedidos" >
+        </activity>
     </application>
 
 </manifest>
