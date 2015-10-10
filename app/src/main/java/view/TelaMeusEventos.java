@@ -98,6 +98,20 @@ public class TelaMeusEventos extends AppCompatActivity {
 
             //Add button to LinearLayout
             ll.addView(btn);
+
+            final Button btn2 = new Button(this);
+            btn2.setText("Pedidos");
+            // Set click listener for button
+            btn2.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent actionPedidos = new Intent(TelaMeusEventos.this, TelaPedidos.class);
+                    actionPedidos.putExtra("evento_id", idEvento);
+                    TelaMeusEventos.this.startActivity(actionPedidos);
+                }
+            });
+
+            //Add button to LinearLayout
+            ll.addView(btn2);
             //Adicionar layout item no layout geral
             lm.addView(ll);
         }
