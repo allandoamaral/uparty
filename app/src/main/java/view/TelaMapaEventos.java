@@ -145,8 +145,7 @@ public class TelaMapaEventos extends FragmentActivity {
             Button btnMeusEventos = (Button)findViewById(R.id.btn_meus_eventos);
             btnMeusEventos.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Intent actionMeusEventos = new Intent(TelaMapaEventos.this, TelaMenuInicial.class);
-                    //myIntent.putExtra("key", value); //Optional parameters
+                    Intent actionMeusEventos = new Intent(TelaMapaEventos.this, TelaMeusEventos.class);
                     TelaMapaEventos.this.startActivity(actionMeusEventos);
                 }
             });

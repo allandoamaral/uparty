@@ -25,6 +25,7 @@ public class PedidoMusicaDAO {
     // url para inserir novo evento no banco
     private static String url_insert_new = "http://uparty.3eeweb.com/db_inserir_pedido.php";
     private static String url_get_pedidos = "http://uparty.3eeweb.com/db_retornar_pedidos.php";
+    private static String url_get_pedidos_recebidos = "http://uparty.3eeweb.com/db_retornar_pedidos_recebidos.php";
 
     // JSON tags
     private String success = "0";
@@ -39,6 +40,7 @@ public class PedidoMusicaDAO {
     private static final String TAG_EVENTO = "pedido_evento_id";
     private static final String TAG_PEDINTE = "pedido_pedinte_id";
     private static final String TAG_HORA = "pedido_horario";
+
 
     private static final String TAG_USUARIO_NOME = "pedinte_nome";
 
@@ -73,7 +75,6 @@ public class PedidoMusicaDAO {
     }
 
     public HashMap<Integer, List<String>> getPedidosEvento (String usuarioId, String eventoId) {
-        System.out.println("LALA usuario- " + usuarioId);
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair(TAG_DJ, usuarioId));
         params.add(new BasicNameValuePair(TAG_EVENTO, eventoId));
@@ -81,7 +82,7 @@ public class PedidoMusicaDAO {
         json = jsonParser.makeHttpRequest(url_get_pedidos, "GET", params);
 
         HashMap<Integer, List<String>> listaPedidos = new HashMap<>();
-        Log.d("Pedidos LALA: ", json.toString());
+        Log.d("Pedidos: ", json.toString());
 
         try {
             // Checking for SUCCESS TAG
@@ -103,6 +104,43 @@ public class PedidoMusicaDAO {
                 }
             }
         } catch (JSONException e) {
+
+            e.printStackTrace();
+        }
+        return listaPedidos;
+    }
+
+    public HashMap<Integer, List<String>> getPedidosRecebidos (String usuarioId) {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair(TAG_DJ, usuarioId));
+        // getting JSON string from URL
+        json = jsonParser.makeHttpRequest(url_get_pedidos_recebidos, "GET", params);
+
+        HashMap<Integer, List<String>> listaPedidos = new HashMap<>();
+        Log.d("Pedidos: ", json.toString());
+
+        try {
+            // Checking for SUCCESS TAG
+            int success = json.getInt(TAG_SUCCESS);
+            if (success == 1) {
+                // retornando json array de eventos
+                pedidoJson = json.getJSONArray(TAG_PEDIDOS);
+                System.out.println("LALA " + pedidoJson);
+                for (int i = 0; i < pedidoJson.length(); i++) {
+                    JSONObject c = null;
+                    c = pedidoJson.getJSONObject(i);
+                    List<String> tempList = new ArrayList<>();
+                    tempList.add(c.getString(TAG_ID));
+                    tempList.add(c.getString(TAG_ARTISTA));
+                    tempList.add(c.getString(TAG_MUSICA));
+                    tempList.add(c.getString(TAG_HORA));
+                    tempList.add(c.getString(TAG_PEDINTE));
+                    tempList.add(c.getString(TAG_USUARIO_NOME));
+                    listaPedidos.put(i, tempList);
+                }
+            }
+        } catch (JSONException e) {
+
             e.printStackTrace();
         }
         return listaPedidos;

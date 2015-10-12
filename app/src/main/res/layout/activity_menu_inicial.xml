@@ -27,8 +27,8 @@
         <Button
             android:layout_width="154dp"
             android:layout_height="wrap_content"
-            android:text="Minha Conta"
-            android:id="@+id/btn_main_conta"
+            android:text="Eventos Próximos"
+            android:id="@+id/btn_main_eventos"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:background="#ff0039"
@@ -42,18 +42,18 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:background="#ff0039"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:visibility="gone" />
 
         <Button
             android:layout_width="154dp"
             android:layout_height="wrap_content"
-            android:text="Eventos Próximos"
-            android:id="@+id/btn_main_eventos"
+            android:text="Minha Conta"
+            android:id="@+id/btn_main_conta"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:background="#ff0039"
             android:textColor="#ffffff" />
-
 
 
     </LinearLayout>

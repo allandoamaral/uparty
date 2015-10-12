@@ -21,8 +21,6 @@ public class Evento {
         this.dataString = dataString;
     }
 
-
-
     public int getId() {
         return id;
     }

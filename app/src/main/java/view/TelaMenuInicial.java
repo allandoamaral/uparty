@@ -1,6 +1,7 @@
 package view;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,10 +13,16 @@ import com.example.allandoamaralalves.upartyproject.R;
 
 public class TelaMenuInicial extends AppCompatActivity {
 
+    //Valor salvo do usuario logado no Shared Preferences (session)
+    private String prefId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_inicial);
+
+        SharedPreferences sharedPref = getSharedPreferences("userInfo", MODE_PRIVATE);
+        prefId = sharedPref.getString("usuario_id", "");
 
         Button btn = (Button)findViewById(R.id.btn_main_eventos);
 
@@ -37,15 +44,19 @@ public class TelaMenuInicial extends AppCompatActivity {
             }
         });
 
-        Button btn3 = (Button)findViewById(R.id.btn_meus_eventos);
+        if (prefId != "") {
+            Button btn3 = (Button) findViewById(R.id.btn_meus_eventos);
 
-        btn3.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent actionEventos = new Intent(TelaMenuInicial.this, TelaMeusEventos.class);
-                //myIntent.putExtra("key", value); //Optional parameters
-                TelaMenuInicial.this.startActivity(actionEventos);
-            }
-        });
+            btn3.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent actionEventos = new Intent(TelaMenuInicial.this, TelaMeusEventos.class);
+                    //myIntent.putExtra("key", value); //Optional parameters
+                    TelaMenuInicial.this.startActivity(actionEventos);
+                }
+            });
+
+            btn3.setVisibility(View.VISIBLE);
+        }
 
 
     }

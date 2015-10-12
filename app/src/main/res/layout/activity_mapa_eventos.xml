@@ -57,6 +57,14 @@
                 tools:context="view.TelaMapaEventos"
                 android:name="com.google.android.gms.maps.SupportMapFragment" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -75,14 +83,6 @@
                     android:textSize="12dp" />
 
             </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
 
             <Button
                 android:layout_width="wrap_content"
@@ -111,6 +111,7 @@
                 android:background="#ff0039"
                 android:padding="5dp"
                 android:visibility="invisible" />
+
         </LinearLayout>
 
         <Button
@@ -127,6 +128,7 @@
             android:padding="5dp"
             android:visibility="invisible"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp" />
     </LinearLayout>
 </RelativeLayout>

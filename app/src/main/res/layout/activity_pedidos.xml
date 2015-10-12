@@ -17,11 +17,6 @@
         android:id="@+id/layout_resultado"
         android:layout_below="@+id/pedidos_txt">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/textView5" />
     </LinearLayout>
 
 </RelativeLayout>

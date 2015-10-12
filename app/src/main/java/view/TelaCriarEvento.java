@@ -147,7 +147,6 @@ public class TelaCriarEvento extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Novo evento salvo...", Toast.LENGTH_LONG).show();
                 Intent actionMapa = new Intent(TelaCriarEvento.this, TelaMapaEventos.class);
                 TelaCriarEvento.this.startActivity(actionMapa);
-                System.out.println("LALA" + idResultado);
                 //Após criar evento, ir para tela de seleção de djs
                 Intent actionSelecionarDjs = new Intent(TelaCriarEvento.this, TelaSelecionarDjs.class);
                 actionSelecionarDjs.putExtra("evento_id", idResultado); //Optional parameters
