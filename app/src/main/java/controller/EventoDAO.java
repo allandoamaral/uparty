@@ -24,7 +24,11 @@ public class EventoDAO {
     private static String url_event_details = "http://uparty.3eeweb.com/db_retornar_evento.php";
     private static String url_get_events_by_dj = "http://uparty.3eeweb.com/db_retornar_eventos_dj.php";
     private static String url_get_events_created = "http://uparty.3eeweb.com/db_retornar_eventos_criados.php";
+    private static String url_get_events_partic = "http://uparty.3eeweb.com/db_retornar_eventos_participante.php";
     private static String url_is_participante = "http://uparty.3eeweb.com/db_retornar_participacao.php";
+
+    private static String url_all_events = "http://uparty.3eeweb.com/db_retornar_eventos.php";
+    private static String url_actual_events = "http://uparty.3eeweb.com/db_retornar_eventos_atuais.php";
 
     // JSON tags
     private String success = "0";
@@ -46,6 +50,8 @@ public class EventoDAO {
 
     private JSONArray eventoJson = null;
     private Evento eventoObj;
+
+    ArrayList<HashMap<String, String>> listaEventos;
 
     public String inserirEvento(Evento evento) {
         // Building Parameters
@@ -115,6 +121,54 @@ public class EventoDAO {
         return eventoObj;
     }
 
+    public JSONArray getTodosEventos() {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        // getting JSON string from URL
+        json = jsonParser.makeHttpRequest(url_all_events, "GET", params);
+
+        Log.d("Djs: ", json.toString());
+
+        JSONArray events = null;
+
+        try {
+            // Checking for SUCCESS TAG
+            int success = json.getInt(TAG_SUCCESS);
+
+            if (success == 1) {
+                // retornando json array de eventos
+                events = json.getJSONArray(TAG_EVENTOS);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return events;
+    }
+
+    public JSONArray getEventosAtuais () {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        // getting JSON string from URL
+        json = jsonParser.makeHttpRequest(url_actual_events, "GET", params);
+
+        Log.d("Djs: ", json.toString());
+
+        JSONArray events = null;
+
+        try {
+            // Checking for SUCCESS TAG
+            int success = json.getInt(TAG_SUCCESS);
+
+            if (success == 1) {
+                // retornando json array de eventos
+                events = json.getJSONArray(TAG_EVENTOS);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return events;
+    }
+
     public HashMap<Integer, List<String>> getEventosDj(String usuarioId) {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair(TAG_USER_ID, usuarioId));
@@ -153,6 +207,36 @@ public class EventoDAO {
 
         HashMap<Integer, List<String>> listaEventos = new HashMap<>();
         Log.d("Djs: ", json.toString());
+
+        try {
+            // Checking for SUCCESS TAG
+            int success = json.getInt(TAG_SUCCESS);
+            if (success == 1) {
+                // retornando json array de eventos
+                eventoJson = json.getJSONArray(TAG_EVENTOS);
+                for (int i = 0; i < eventoJson.length(); i++) {
+                    JSONObject c = null;
+                    c = eventoJson.getJSONObject(i);
+                    List<String> tempList = new ArrayList<>();
+                    tempList.add(c.getString(TAG_ID));
+                    tempList.add(c.getString(TAG_TITULO));
+                    listaEventos.put(i, tempList);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return listaEventos;
+    }
+
+    public HashMap<Integer, List<String>> getEventosParticipante(String usuarioId) {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair(TAG_USER_ID, usuarioId));
+        // getting JSON string from URL
+        json = jsonParser.makeHttpRequest(url_get_events_partic, "GET", params);
+
+        HashMap<Integer, List<String>> listaEventos = new HashMap<>();
+        Log.d("Eventos: ", json.toString());
 
         try {
             // Checking for SUCCESS TAG

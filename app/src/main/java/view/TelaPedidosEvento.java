@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,10 +19,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 
-import controller.EventoDAO;
 import controller.PedidoMusicaDAO;
 
-public class TelaPedidos extends AppCompatActivity {
+public class TelaPedidosEvento extends AppCompatActivity {
 
     // Progress Dialog
     private ProgressDialog pDialog;
@@ -61,13 +59,41 @@ public class TelaPedidos extends AppCompatActivity {
             // layout de cada item
             LinearLayout ll = new LinearLayout(this);
             ll.setOrientation(LinearLayout.HORIZONTAL);
+
+            LinearLayout l1 = new LinearLayout(this);
+            l1.setOrientation(LinearLayout.VERTICAL);
             // Create TextView
             TextView itemLista;
-            for (int j = 1; j < 6; j++) {
-                itemLista = new TextView(this);
-                itemLista.setText(listaPedidosEvento.get(i).get(j));
-                ll.addView(itemLista);
-            }
+
+            itemLista = new TextView(this);
+            itemLista.setText("Artista - " + listaPedidosEvento.get(i).get(1));
+            l1.addView(itemLista);
+
+            itemLista = new TextView(this);
+            itemLista.setText("Música - " + listaPedidosEvento.get(i).get(2));
+            l1.addView(itemLista);
+
+            itemLista = new TextView(this);
+            itemLista.setText("Hora do pedido - " + listaPedidosEvento.get(i).get(3));
+            l1.addView(itemLista);
+
+            itemLista = new TextView(this);
+            itemLista.setText("Pedido por - " + listaPedidosEvento.get(i).get(5));
+            l1.addView(itemLista);
+
+            LinearLayout l2 = new LinearLayout(this);
+            l2.setOrientation(LinearLayout.VERTICAL);
+
+            final Button btnAcc = new Button(this);
+            btnAcc.setText("Aceitar");
+            l2.addView(btnAcc);
+
+            final Button btnRec = new Button(this);
+            btnRec.setText("Recusar");
+            l2.addView(btnRec);
+
+            ll.addView(l1);
+            ll.addView(l2);
             // Create Button
             /*final Button btn = new Button(this);
             final String idEvento = listaEventosCriados.get(i).get(0);
@@ -115,7 +141,7 @@ public class TelaPedidos extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(TelaPedidos.this);
+            pDialog = new ProgressDialog(TelaPedidosEvento.this);
             pDialog.setMessage("Carregando pedidos...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
@@ -131,7 +157,7 @@ public class TelaPedidos extends AppCompatActivity {
             pDialog.dismiss();
             System.out.println("LALA EVENTO- " + eventoId);
             System.out.println("LALA LISTA- " + listaPedidosEvento);
-            TelaPedidos.this.setResultado();
+            TelaPedidosEvento.this.setResultado();
         }
     }
 }

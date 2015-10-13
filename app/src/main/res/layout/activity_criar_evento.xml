@@ -1,11 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_height="match_parent"
     tools:context="view.TelaCriarEvento"
-    android:background="#060202">
+    android:padding="10dp">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -14,186 +11,188 @@
         android:background="#ffffff"
         android:padding="5dp">
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            android:id="@+id/linearLayout"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Nome:"
+                android:id="@+id/textView"
+                android:layout_margin="5dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtnome"
+                android:layout_gravity="center_horizontal"
+                android:inputType="textPersonName"
+                android:layout_margin="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Data:"
+                android:id="@+id/textView2"
+                android:layout_margin="5dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="__/__/____"
+                    android:id="@+id/text_data"
+                    android:layout_marginTop="10dp"
+                    android:padding="5dp"
+                    android:layout_marginRight="10dp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Selecionar data"
+                    android:id="@+id/date_picker_button"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Hora:"
+                android:id="@+id/textView3"
+                android:layout_margin="5dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="___ : ___"
+                    android:id="@+id/text_hora"
+                    android:layout_marginTop="10dp"
+                    android:padding="5dp"
+                    android:layout_marginRight="10dp"
+                    android:singleLine="false" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Selecionar hora"
+                    android:id="@+id/time_picker_button"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Descrição:"
+                android:id="@+id/textView4"
+                android:layout_margin="5dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/txtdescricao"
+                android:layout_margin="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Cidade:"
+                android:id="@+id/textView12"
+                android:layout_margin="5dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtcidade"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"
+                android:hyphenationFrequency="normal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Endereço completo:"
+                android:id="@+id/textView14"
+                android:layout_margin="5dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtendereco"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"
+                android:hyphenationFrequency="normal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Imagem:"
+                android:id="@+id/textView6"
+                android:layout_margin="5dp" />
+
+            <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inserir Imagem"
+        android:id="@+id/button4"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:padding="5dp"
+        android:textColor="#ffff"
+        android:background="#ff0039" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/scrollView"
+            android:layout_centerHorizontal="true"
+            android:weightSum="1">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Voltar"
+                android:id="@+id/btn_voltar" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Prosseguir"
+                android:id="@+id/btn_criar"
+                android:layout_marginLeft="100dp"
+                android:hyphenationFrequency="none"
+                android:layout_weight="0.81" />
+        </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="1"
-        android:id="@+id/linearLayout"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Nome:"
-            android:id="@+id/textView"
-            android:layout_margin="5dp" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtnome"
-            android:layout_gravity="center_horizontal"
-            android:inputType="textPersonName"
-            android:layout_margin="5dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Data:"
-            android:id="@+id/textView2"
-            android:layout_margin="5dp" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="__/__/____"
-                android:id="@+id/text_data"
-                android:layout_marginTop="10dp"
-                android:padding="5dp"
-                android:layout_marginRight="10dp" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Selecionar data"
-                android:id="@+id/date_picker_button"
-                android:layout_gravity="center_horizontal" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Hora:"
-            android:id="@+id/textView3"
-            android:layout_margin="5dp" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="___ : ___"
-                android:id="@+id/text_hora"
-                android:layout_marginTop="10dp"
-                android:padding="5dp"
-                android:layout_marginRight="10dp"
-                android:singleLine="false" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Selecionar hora"
-                android:id="@+id/time_picker_button"
-                android:layout_gravity="center_horizontal" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Descrição:"
-            android:id="@+id/textView4"
-            android:layout_margin="5dp" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="78dp"
-            android:inputType="textMultiLine"
-            android:ems="10"
-            android:id="@+id/txtdescricao"
-            android:layout_margin="5dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Cidade:"
-            android:id="@+id/textView12"
-            android:layout_margin="5dp" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtcidade"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp"
-            android:hyphenationFrequency="normal" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Endereço completo:"
-            android:id="@+id/textView14"
-            android:layout_margin="5dp" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtendereco"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp"
-            android:hyphenationFrequency="normal" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Imagem:"
-            android:id="@+id/textView6"
-            android:layout_margin="5dp" />
-
-        <Button
-    style="?android:attr/buttonStyleSmall"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Inserir Imagem"
-    android:id="@+id/button4"
-    android:layout_gravity="center_horizontal"
-    android:layout_alignParentBottom="true"
-    android:layout_centerHorizontal="true"
-    android:padding="5dp"
-    android:textColor="#ffff"
-    android:background="#ff0039" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/scrollView"
-        android:layout_centerHorizontal="true">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Voltar"
-            android:id="@+id/btn_voltar" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Prosseguir"
-            android:id="@+id/btn_criar"
-            android:layout_marginLeft="150dp"
-            android:hyphenationFrequency="none" />
-    </LinearLayout>
-    </LinearLayout>
 </RelativeLayout>

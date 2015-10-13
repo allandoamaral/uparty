@@ -18,4 +18,5 @@
     <string name="title_activity_selecionar_djs">Selecionar Djs</string>
     <string name="title_activity_meus_eventos">Meus Eventos</string>
     <string name="title_activity_pedidos">Pedidos</string>
+    <string name="title_activity_pedidos_usuario">PedidosUsuario</string>
 </resources>

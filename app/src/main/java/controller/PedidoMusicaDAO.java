@@ -32,7 +32,7 @@ public class PedidoMusicaDAO {
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_PEDIDOS = "pedidos";
 
-    //Tags para os campos da tabela TelaPedidos no bando de dados
+    //Tags para os campos da tabela TelaPedidosEvento no bando de dados
     private static final String TAG_ID = "pedido_id";
     private static final String TAG_ARTISTA = "pedido_artista";
     private static final String TAG_MUSICA = "pedido_musica";

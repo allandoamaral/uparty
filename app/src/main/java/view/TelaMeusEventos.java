@@ -1,7 +1,6 @@
 package view;
 
 import android.app.ProgressDialog;
-import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -19,12 +18,10 @@ import com.example.allandoamaralalves.upartyproject.R;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import controller.EventoDAO;
-import controller.UsuarioDAO;
 
 public class TelaMeusEventos extends AppCompatActivity {
 
@@ -75,45 +72,51 @@ public class TelaMeusEventos extends AppCompatActivity {
         // Layout geral
         LinearLayout lm = (LinearLayout)findViewById(R.id.layout_dj);
         //percorrer lista de usuarios retornados da busca e exibir na tela
-        for (int i = 0; i < listaEventosDj.size(); i++) {
-            // layout de cada item
-            LinearLayout ll = new LinearLayout(this);
-            ll.setOrientation(LinearLayout.HORIZONTAL);
-            // Create TextView
+        if (listaEventosDj.size() == 0) {
             TextView itemUsuario = new TextView(this);
-            itemUsuario.setText(listaEventosDj.get(i).get(1));
-            ll.addView(itemUsuario);
-            // Create Button
-            final Button btn = new Button(this);
-            final String idEvento = listaEventosDj.get(i).get(0);
-            btn.setText("+ Info");
-            // Set click listener for button
-            btn.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent actionVisualizarEvento = new Intent(TelaMeusEventos.this, TelaVisualizarEvento.class);
-                    actionVisualizarEvento.putExtra("evento_id", idEvento);
-                    TelaMeusEventos.this.startActivity(actionVisualizarEvento);
-                }
-            });
+            itemUsuario.setText("Não há eventos cadastrados.");
+            lm.addView(itemUsuario);
+        } else {
+            for (int i = 0; i < listaEventosDj.size(); i++) {
+                // layout de cada item
+                LinearLayout ll = new LinearLayout(this);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+                // Create TextView
+                TextView itemUsuario = new TextView(this);
+                itemUsuario.setText(listaEventosDj.get(i).get(1));
+                ll.addView(itemUsuario);
+                // Create Button
+                final Button btn = new Button(this);
+                final String idEvento = listaEventosDj.get(i).get(0);
+                btn.setText("+ Info");
+                // Set click listener for button
+                btn.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent actionVisualizarEvento = new Intent(TelaMeusEventos.this, TelaVisualizarEvento.class);
+                        actionVisualizarEvento.putExtra("evento_id", idEvento);
+                        TelaMeusEventos.this.startActivity(actionVisualizarEvento);
+                    }
+                });
 
-            //Add button to LinearLayout
-            ll.addView(btn);
+                //Add button to LinearLayout
+                ll.addView(btn);
 
-            final Button btn2 = new Button(this);
-            btn2.setText("Pedidos");
-            // Set click listener for button
-            btn2.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent actionPedidos = new Intent(TelaMeusEventos.this, TelaPedidos.class);
-                    actionPedidos.putExtra("evento_id", idEvento);
-                    TelaMeusEventos.this.startActivity(actionPedidos);
-                }
-            });
+                final Button btn2 = new Button(this);
+                btn2.setText("Pedidos");
+                // Set click listener for button
+                btn2.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent actionPedidos = new Intent(TelaMeusEventos.this, TelaPedidosEvento.class);
+                        actionPedidos.putExtra("evento_id", idEvento);
+                        TelaMeusEventos.this.startActivity(actionPedidos);
+                    }
+                });
 
-            //Add button to LinearLayout
-            ll.addView(btn2);
-            //Adicionar layout item no layout geral
-            lm.addView(ll);
+                //Add button to LinearLayout
+                ll.addView(btn2);
+                //Adicionar layout item no layout geral
+                lm.addView(ll);
+            }
         }
     }
 
@@ -121,31 +124,75 @@ public class TelaMeusEventos extends AppCompatActivity {
         // Layout geral
         LinearLayout lm = (LinearLayout)findViewById(R.id.layout_criados);
         //percorrer lista de usuarios retornados da busca e exibir na tela
-        for (int i = 0; i < listaEventosCriados.size(); i++) {
-            // layout de cada item
-            LinearLayout ll = new LinearLayout(this);
-            ll.setOrientation(LinearLayout.HORIZONTAL);
-            // Create TextView
+        if (listaEventosCriados.size() == 0) {
             TextView itemUsuario = new TextView(this);
-            itemUsuario.setText(listaEventosCriados.get(i).get(1));
-            ll.addView(itemUsuario);
-            // Create Button
-            final Button btn = new Button(this);
-            final String idEvento = listaEventosCriados.get(i).get(0);
-            btn.setText("+ Info");
-            // Set click listener for button
-            btn.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent actionVisualizarEvento = new Intent(TelaMeusEventos.this, TelaVisualizarEvento.class);
-                    actionVisualizarEvento.putExtra("evento_id", idEvento);
-                    TelaMeusEventos.this.startActivity(actionVisualizarEvento);
-                }
-            });
+            itemUsuario.setText("Não há eventos cadastrados.");
+            lm.addView(itemUsuario);
+        } else {
+            for (int i = 0; i < listaEventosCriados.size(); i++) {
+                // layout de cada item
+                LinearLayout ll = new LinearLayout(this);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+                // Create TextView
+                TextView itemUsuario = new TextView(this);
+                itemUsuario.setText(listaEventosCriados.get(i).get(1));
+                ll.addView(itemUsuario);
+                // Create Button
+                final Button btn = new Button(this);
+                final String idEvento = listaEventosCriados.get(i).get(0);
+                btn.setText("+ Info");
+                // Set click listener for button
+                btn.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent actionVisualizarEvento = new Intent(TelaMeusEventos.this, TelaVisualizarEvento.class);
+                        actionVisualizarEvento.putExtra("evento_id", idEvento);
+                        TelaMeusEventos.this.startActivity(actionVisualizarEvento);
+                    }
+                });
 
-            //Add button to LinearLayout
-            ll.addView(btn);
-            //Adicionar layout item no layout geral
-            lm.addView(ll);
+                //Add button to LinearLayout
+                ll.addView(btn);
+                //Adicionar layout item no layout geral
+                lm.addView(ll);
+            }
+        }
+    }
+
+    public void setEventosParticipante() {
+        // Layout geral
+        LinearLayout lm = (LinearLayout)findViewById(R.id.layout_partic);
+        //percorrer lista de usuarios retornados da busca e exibir na tela
+        if (listaEventosPartic.size() == 0) {
+            TextView itemUsuario = new TextView(this);
+            itemUsuario.setText("Não há eventos cadastrados.");
+            lm.addView(itemUsuario);
+        } else {
+            for (int i = 0; i < listaEventosPartic.size(); i++) {
+                // layout de cada item
+                LinearLayout ll = new LinearLayout(this);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+                // Create TextView
+                TextView itemUsuario = new TextView(this);
+                itemUsuario.setText(listaEventosPartic.get(i).get(1));
+                ll.addView(itemUsuario);
+                // Create Button
+                final Button btn = new Button(this);
+                final String idEvento = listaEventosPartic.get(i).get(0);
+                btn.setText("+ Info");
+                // Set click listener for button
+                btn.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent actionVisualizarEvento = new Intent(TelaMeusEventos.this, TelaVisualizarEvento.class);
+                        actionVisualizarEvento.putExtra("evento_id", idEvento);
+                        TelaMeusEventos.this.startActivity(actionVisualizarEvento);
+                    }
+                });
+
+                //Add button to LinearLayout
+                ll.addView(btn);
+                //Adicionar layout item no layout geral
+                lm.addView(ll);
+            }
         }
     }
 
@@ -186,6 +233,7 @@ public class TelaMeusEventos extends AppCompatActivity {
         protected String doInBackground(String... args) {
             listaEventosDj = dao.getEventosDj(prefId);
             listaEventosCriados = dao.getEventosCriados(prefId);
+            listaEventosPartic = dao.getEventosParticipante(prefId);
             return null;
         }
 
@@ -193,6 +241,7 @@ public class TelaMeusEventos extends AppCompatActivity {
             pDialog.dismiss();
             TelaMeusEventos.this.setEventos();
             TelaMeusEventos.this.setEventosCriados();
+            TelaMeusEventos.this.setEventosParticipante();
         }
     }
 }

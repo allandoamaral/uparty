@@ -142,7 +142,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btn_logout"
-            android:layout_marginTop="50dp" />
+            android:layout_marginTop="50dp"
+            android:textColor="#010101"
+            android:visibility="visible"
+            android:text="Sair" />
 
     </LinearLayout>
 

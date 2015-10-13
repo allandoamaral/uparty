@@ -70,8 +70,12 @@
             android:label="@string/title_activity_meus_eventos" >
         </activity>
         <activity
-            android:name="view.TelaPedidos"
+            android:name="view.TelaPedidosEvento"
             android:label="@string/title_activity_pedidos" >
+        </activity>
+        <activity
+            android:name="view.TelaPedidosUsuario"
+            android:label="@string/title_activity_pedidos_usuario" >
         </activity>
     </application>
 

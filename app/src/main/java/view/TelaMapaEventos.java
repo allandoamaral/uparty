@@ -30,9 +30,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +54,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import controller.EventoDAO;
 import model.JSONParser;
 
 
@@ -71,10 +74,7 @@ public class TelaMapaEventos extends FragmentActivity {
     protected String latSelecionada, longSelecionada, cidade, endereco, eventoId;
 
     ArrayList<HashMap<String, String>> listaEventos;
-    private static String url_all_events = "http://uparty.3eeweb.com/db_retornar_eventos.php";
     // JSON Node names
-    private static final String TAG_SUCCESS = "success";
-    private static final String TAG_EVENTS = "eventos";
     private static final String TAG_ID = "evento_id";
     private static final String TAG_NAME = "evento_titulo";
     private static final String TAG_DESC = "evento_descricao";
@@ -109,7 +109,7 @@ public class TelaMapaEventos extends FragmentActivity {
         criarEventoFlag = false;
 
         // Loading products in Background Thread
-        new LoadAllEvents().execute();
+        new LoadActualEvents().execute();
 
         SharedPreferences sharedPref = getSharedPreferences("userInfo", MODE_PRIVATE);
         prefId = sharedPref.getString("usuario_id", "");
@@ -227,8 +227,26 @@ public class TelaMapaEventos extends FragmentActivity {
                 }
             }
         });
-    }
 
+        Switch mySwitch = (Switch) findViewById(R.id.switch_button);
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+                if (isChecked) {
+                    Toast.makeText(getApplicationContext(), "Todos os eventos",
+                    Toast.LENGTH_SHORT).show();
+                    mMap.clear();
+                    new LoadAllEvents().execute();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Eventos atuais", Toast.LENGTH_SHORT).show();
+                    mMap.clear();
+                    new LoadActualEvents().execute();
+                }
+            }
+        });
+    }
 
     public void geoLocate (View v) throws IOException {
         hideSoftKeyboard(v);
@@ -324,6 +342,55 @@ public class TelaMapaEventos extends FragmentActivity {
 
 
         class LoadAllEvents extends AsyncTask<String, String, String> {
+            private JSONObject json;
+
+            /**
+             * Before starting background thread Show Progress Dialog
+             */
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                pDialog = new ProgressDialog(TelaMapaEventos.this);
+                pDialog.setMessage("Loading events. Please wait...");
+                pDialog.setIndeterminate(false);
+                pDialog.setCancelable(false);
+                pDialog.show();
+            }
+
+            /**
+             * getting All products from url
+             */
+            protected String doInBackground(String... args) {
+                EventoDAO dao = new EventoDAO();
+                events = dao.getTodosEventos();
+                return null;
+            }
+
+            /**
+             * After completing background task Dismiss the progress dialog
+             **/
+            protected void onPostExecute(String file_url) {
+                // dismiss the dialog after getting all products
+                pDialog.dismiss();
+                // percorrendo todos os eventos
+                for (int i = 0; i < events.length(); i++) {
+                    JSONObject c = null;
+                    try {
+                        c = events.getJSONObject(i);
+                        String id = c.getString(TAG_ID);
+                        String name = c.getString(TAG_NAME);
+                        String lat = c.getString(TAG_LAT);
+                        String lng = c.getString(TAG_LONG);
+
+                        Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng))).title(name).snippet(id));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+    class LoadActualEvents extends AsyncTask<String, String, String> {
         private JSONObject json;
         /**
          * Before starting background thread Show Progress Dialog
@@ -342,32 +409,11 @@ public class TelaMapaEventos extends FragmentActivity {
          * getting All products from url
          * */
         protected String doInBackground(String... args) {
-            // Building Parameters
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            // getting JSON string from URL
-            json = jsonParser.makeHttpRequest(url_all_events, "GET", params);
-
-            // Check your log cat for JSON reponse
-            Log.d("All Products: ", json.toString());
-
-            try {
-                // Checking for SUCCESS TAG
-                int success = json.getInt(TAG_SUCCESS);
-
-                if (success == 1) {
-                    // retornando json array de eventos
-                    events = json.getJSONArray(TAG_EVENTS);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
+            EventoDAO dao = new EventoDAO();
+            events = dao.getEventosAtuais();
             return null;
         }
 
-        /**
-         * After completing background task Dismiss the progress dialog
-         * **/
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
             pDialog.dismiss();

@@ -31,7 +31,7 @@
                     android:id="@android:id/tabcontent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="20dp">
+                    android:padding="5dp">
 
                     <LinearLayout
                         android:id="@+id/tab1"
@@ -84,11 +84,6 @@
                             android:layout_height="match_parent"
                             android:id="@+id/layout_partic" >
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="New Text"
-                                android:id="@+id/textView30" />
                         </LinearLayout>
                     </LinearLayout>
                 </FrameLayout>
