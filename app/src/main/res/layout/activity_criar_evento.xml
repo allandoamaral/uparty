@@ -148,28 +148,7 @@
                 android:layout_margin="5dp"
                 android:hyphenationFrequency="normal" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Imagem:"
-                android:id="@+id/textView6"
-                android:layout_margin="5dp" />
-
-            <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Inserir Imagem"
-        android:id="@+id/button4"
-        android:layout_gravity="center_horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:padding="5dp"
-        android:textColor="#ffff"
-        android:background="#ff0039" />
-
-        <LinearLayout
+            <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

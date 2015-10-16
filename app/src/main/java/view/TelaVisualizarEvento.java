@@ -169,8 +169,8 @@ public class TelaVisualizarEvento extends AppCompatActivity {
             txtDescricao.setText(eventoObj.getDescricao());
             txtEndereco.setText(eventoObj.getEndereco());
             txtCidade.setText(eventoObj.getCidade());
-            txtData.setText(eventoObj.getDataString().substring(5, 7) + "/" +
-                    eventoObj.getDataString().substring(8, 10) + "/" + eventoObj.getDataString().substring(0, 4));
+            txtData.setText(eventoObj.getDataString().substring(8, 10) + "/" +
+                    eventoObj.getDataString().substring(5, 7) + "/" + eventoObj.getDataString().substring(0, 4));
             txtHora.setText(eventoObj.getDataString().substring(10, 16));
             criadorId = String.valueOf(eventoObj.getCriador_id());
             TelaVisualizarEvento.this.setBotoes();

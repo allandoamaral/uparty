@@ -17,7 +17,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true">
 
         <LinearLayout
             android:orientation="vertical"
@@ -62,7 +63,7 @@
         <Switch
             android:layout_width="249dp"
             android:layout_height="wrap_content"
-            android:text="Eventos do momento"
+            android:text="Eventos futuros"
             android:id="@+id/switch_button"
             android:enabled="true"
             android:textColor="#ffffff" />

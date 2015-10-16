@@ -2,9 +2,6 @@ package model;
 
 import java.util.Date;
 
-/**
- * Created by allandoamaralalves on 03/10/15.
- */
 public class PedidoMusica {
     private String artista, musica;
     private int usuarioId, djId, eventoId;
