@@ -57,8 +57,8 @@ public class TelaMinhaConta extends AppCompatActivity {
             layoutLogin.setVisibility(View.INVISIBLE);
             LinearLayout layoutAccount = (LinearLayout) findViewById(R.id.account_content);
             layoutAccount.setVisibility(View.VISIBLE);
-            txtId = (TextView) findViewById(R.id.id_usuario_txt);
-            txtId.setText(prefId);
+            //txtId = (TextView) findViewById(R.id.id_usuario_txt);
+            //txtId.setText(prefId);
 
             Button btnLogout = (Button)findViewById(R.id.btn_logout);
 

@@ -26,6 +26,8 @@ public class PedidoMusicaDAO {
     private static String url_insert_new = "http://uparty.3eeweb.com/db_inserir_pedido.php";
     private static String url_get_pedidos = "http://uparty.3eeweb.com/db_retornar_pedidos.php";
     private static String url_get_pedidos_recebidos = "http://uparty.3eeweb.com/db_retornar_pedidos_recebidos.php";
+    private static String url_accept_pedido = "http://uparty.3eeweb.com/db_aceitar_pedido.php";
+    private static String url_reject_pedido = "http://uparty.3eeweb.com/db_recusar_pedido.php";
 
     // JSON tags
     private String success = "0";
@@ -144,5 +146,45 @@ public class PedidoMusicaDAO {
             e.printStackTrace();
         }
         return listaPedidos;
+    }
+
+    public String aceitarPedido(String pedidoId) {
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair(TAG_ID, pedidoId));
+
+        JSONObject json = jsonParser.makeHttpRequest(url_accept_pedido,
+                "GET", params);
+
+        // check log cat fro response
+        Log.d("Create Response", json.toString());
+
+        // check json success tag
+        try {
+            success = json.getString(TAG_SUCCESS);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
+
+    public String recusarPedido(String pedidoId) {
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair(TAG_ID, pedidoId));
+
+        JSONObject json = jsonParser.makeHttpRequest(url_reject_pedido,
+                "GET", params);
+
+        // check log cat fro response
+        Log.d("Create Response", json.toString());
+
+        // check json success tag
+        try {
+            success = json.getString(TAG_SUCCESS);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return success;
     }
 }

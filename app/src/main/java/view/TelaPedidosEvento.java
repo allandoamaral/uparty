@@ -8,9 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.allandoamaralalves.upartyproject.R;
 
@@ -29,7 +31,7 @@ public class TelaPedidosEvento extends AppCompatActivity {
     private HashMap<Integer, List<String>> listaPedidosEvento = new HashMap<>();
 
     //Valores salvos no Shared Preferences (session)
-    private String prefNome, prefId, eventoId;
+    private String prefNome, prefId, eventoId, pedidoId;
 
     private PedidoMusicaDAO dao = new PedidoMusicaDAO();
 
@@ -84,33 +86,38 @@ public class TelaPedidosEvento extends AppCompatActivity {
             LinearLayout l2 = new LinearLayout(this);
             l2.setOrientation(LinearLayout.VERTICAL);
 
+            final String id = listaPedidosEvento.get(i).get(0);
             final Button btnAcc = new Button(this);
             btnAcc.setText("Aceitar");
+            btnAcc.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    pedidoId = id;
+                    new AcceptPedido().execute();
+                }
+            });
             l2.addView(btnAcc);
 
             final Button btnRec = new Button(this);
             btnRec.setText("Recusar");
+            btnRec.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    pedidoId = id;
+                    new RecusarPedido().execute();
+                }
+            });
             l2.addView(btnRec);
 
             ll.addView(l1);
             ll.addView(l2);
-            // Create Button
-            /*final Button btn = new Button(this);
-            final String idEvento = listaEventosCriados.get(i).get(0);
-            btn.setText("+ Info");
-            // Set click listener for button
-            btn.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent actionVisualizarEvento = new Intent(TelaMeusEventos.this, TelaVisualizarEvento.class);
-                    actionVisualizarEvento.putExtra("evento_id", idEvento);
-                    TelaMeusEventos.this.startActivity(actionVisualizarEvento);
-                }
-            });
 
-            //Add button to LinearLayout
-            ll.addView(btn);*/
             //Adicionar layout item no layout geral
             lm.addView(ll);
+        }
+
+        if (listaPedidosEvento.isEmpty()) {
+            TextView text = new TextView(this);
+            text.setText("Não há novos pedidos realizados para este DJ/evento.");
+            lm.addView(text);
         }
     }
 
@@ -155,9 +162,70 @@ public class TelaPedidosEvento extends AppCompatActivity {
 
         protected void onPostExecute(String file_url) {
             pDialog.dismiss();
-            System.out.println("LALA EVENTO- " + eventoId);
-            System.out.println("LALA LISTA- " + listaPedidosEvento);
             TelaPedidosEvento.this.setResultado();
+        }
+    }
+
+    class AcceptPedido extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(TelaPedidosEvento.this);
+            pDialog.setMessage("Aceitando pedido...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        protected String doInBackground(String... args) {
+            PedidoMusicaDAO dao = new PedidoMusicaDAO();
+            String resultado = dao.aceitarPedido(pedidoId);
+            return resultado;
+        }
+
+        protected void onPostExecute(String result) {
+            // dismiss the dialog once product uupdated
+            if(result.equalsIgnoreCase("1")){
+                Toast.makeText(getApplicationContext(), "Pedido aceito...", Toast.LENGTH_LONG).show();
+                Intent actionPedidos = new Intent(TelaPedidosEvento.this, TelaPedidosEvento.class);
+                actionPedidos.putExtra("evento_id", eventoId);
+                TelaPedidosEvento.this.startActivity(actionPedidos);
+            } else {
+                Toast.makeText(getApplicationContext(), "Erro no cadastro!", Toast.LENGTH_LONG).show();
+            }
+            pDialog.dismiss();
+            finish();
+        }
+    }
+
+    class RecusarPedido extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(TelaPedidosEvento.this);
+            pDialog.setMessage("Recusando pedido...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        protected String doInBackground(String... args) {
+            PedidoMusicaDAO dao = new PedidoMusicaDAO();
+            String resultado = dao.recusarPedido(pedidoId);
+            return resultado;
+        }
+
+        protected void onPostExecute(String result) {
+            if(result.equalsIgnoreCase("1")){
+                Toast.makeText(getApplicationContext(), "Pedido recusado...", Toast.LENGTH_LONG).show();
+                Intent actionPedidos = new Intent(TelaPedidosEvento.this, TelaPedidosEvento.class);
+                actionPedidos.putExtra("evento_id", eventoId);
+                TelaPedidosEvento.this.startActivity(actionPedidos);
+            } else {
+                Toast.makeText(getApplicationContext(), "Erro no cadastro!", Toast.LENGTH_LONG).show();
+            }
+            pDialog.dismiss();
+            finish();
         }
     }
 }
